@@ -1,0 +1,25 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['form_validation_required']       = 'Sehemu ya {field} inahitajika.';
+$lang['form_validation_isset']          = 'Sehemu ya {field} lazima iwe na thamani.';
+$lang['form_validation_valid_email']    = 'Sehemu ya {field} lazima iwe na anwani halali ya barua pepe.';
+$lang['form_validation_valid_emails']   = 'Sehemu ya {field} lazima iwe na anwani zote halali za barua pepe.';
+$lang['form_validation_valid_url']      = 'Sehemu ya {field} lazima iwe na URL halali.';
+$lang['form_validation_valid_ip']       = 'Sehemu ya {field} lazima iwe na IP halali.';
+$lang['form_validation_min_length']     = 'Sehemu ya {field} lazima iwe na urefu wa angalau herufi {param}.';
+$lang['form_validation_max_length']     = 'Sehemu ya {field} haiwezi kuzidi urefu wa herufi {param}.';
+$lang['form_validation_exact_length']   = 'Sehemu ya {field} lazima iwe na urefu wa herufi {param} kamili.';
+$lang['form_validation_alpha']          = 'Sehemu ya {field} inaweza kuwa na herufi za alfabeti pekee.';
+$lang['form_validation_alpha_numeric']  = 'Sehemu ya {field} inaweza kuwa na herufi na nambari pekee.';
+$lang['form_validation_alpha_dash']     = 'Sehemu ya {field} inaweza kuwa na herufi, nambari, vistari vya chini, na vistari vya kati pekee.';
+$lang['form_validation_numeric']        = 'Sehemu ya {field} lazima iwe na nambari pekee.';
+$lang['form_validation_is_numeric']     = 'Sehemu ya {field} lazima iwe na herufi za nambari pekee.';
+$lang['form_validation_integer']        = 'Sehemu ya {field} lazima iwe na nambari kamili.';
+$lang['form_validation_regex_match']    = 'Sehemu ya {field} haiko katika umbizo sahihi.';
+$lang['form_validation_matches']        = 'Sehemu ya {field} hailingani na sehemu ya {param}.';
+$lang['form_validation_is_unique']      = 'Sehemu ya {field} lazima iwe na thamani ya kipekee.';
+$lang['form_validation_is_natural']     = 'Sehemu ya {field} lazima iwe na tarakimu pekee.';
+$lang['form_validation_is_natural_no_zero'] = 'Sehemu ya {field} lazima iwe na tarakimu pekee na lazima iwe kubwa kuliko sifuri.';
+$lang['form_validation_decimal']        = 'Sehemu ya {field} lazima iwe na nambari ya desimali.';
+$lang['form_validation_less_than']      = 'Sehemu ya {field} lazima iwe na nambari ndogo kuliko {param}.';
+$lang['form_validation_greater_than']   = 'Sehemu ya {field} lazima iwe na nambari kubwa kuliko {param}.';

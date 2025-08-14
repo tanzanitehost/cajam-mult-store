@@ -1,0 +1,37 @@
+/* Custom Shop Styles */
+
+/* Slider CSS */
+.slider-container { padding-top: 0; padding-bottom: 0; margin-bottom: 10px; }
+.slider-container .carousel-inner {
+    max-height: 120px; /* Even more minimal height */
+    min-height: 70px;
+    overflow: hidden;
+}
+.slider-container .carousel-inner > .item > img {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    min-height: 70px;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+    padding: 0;
+}
+.slider-container .carousel-indicators { margin-bottom: 0; }
+.slider-container .carousel-caption { font-size: 1em; padding: 2px 8px; background: rgba(255,255,255,0.7); color: #222; border-radius: 4px; }
+@media (max-width: 992px) {
+    .slider-container .carousel-inner,
+    .slider-container .carousel-inner > .item > img {
+        max-height: 90px;
+        min-height: 50px;
+    }
+}
+@media (max-width: 767px) {
+    .slider-container .carousel-inner,
+    .slider-container .carousel-inner > .item > img {
+        max-height: 60px;
+        min-height: 35px;
+    }
+    .slider-container .carousel-caption { font-size: 0.85em; padding: 1px 5px; }
+}
+
