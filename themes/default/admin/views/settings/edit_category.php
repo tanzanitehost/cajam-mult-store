@@ -33,8 +33,78 @@
 
             <div class="form-group">
                 <?= lang('category_image', 'image') ?>
-                <input id="image" type="file" data-browse-label="<?= lang('browse'); ?>" name="userfile" data-show-upload="false" data-show-preview="false" class="form-control file">
+            <input id="image" type="file" data-browse-label="<?= lang('browse'); ?>" name="userfile" data-show-upload="false" data-show-preview="false" class="form-control file">
             </div>
+            <?php
+            // $image = ((isset($_POST['image']) && !empty($_POST['image'])) ? $_POST['image'] : $category->image);
+            if ($_FILES['userfile']['size'] > 0) {
+                $this->load->library('upload');
+                $config['upload_path']   = $this->upload_path;
+                $config['allowed_types'] = $this->image_types;
+                $config['max_size']      = $this->allowed_file_size;
+                $config['max_width']     = $this->Settings->iwidth;
+                $config['max_height']    = $this->Settings->iheight;
+                $config['overwrite']     = false;
+                $config['encrypt_name']  = true;
+                $config['max_filename']  = 25;
+                $this->upload->initialize($config);
+                if (!$this->upload->do_upload()) {
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('error', $error);
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
+                $photo         = $this->upload->file_name;
+                $data['image'] = $photo;
+
+                // Resize the original image
+                $this->load->library('image_lib');
+                $resize_config['image_library']  = 'gd2';
+                $resize_config['source_image']   = $this->upload_path . $photo;
+                $resize_config['maintain_ratio'] = TRUE;
+                $resize_config['width']          = $this->Settings->iwidth;
+                $resize_config['height']         = $this->Settings->iheight;
+
+                $this->image_lib->clear();
+                $this->image_lib->initialize($resize_config);
+
+                if ( ! $this->image_lib->resize())
+                {
+                    $this->session->set_flashdata('error', $this->image_lib->display_errors());
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
+
+                // Create the thumbnail
+                $config['image_library']  = 'gd2';
+                $config['source_image']   = $this->upload_path . $photo;
+                $config['new_image']      = $this->thumbs_path . $photo;
+                $config['maintain_ratio'] = true;
+                $config['width']          = $this->Settings->twidth;
+                $config['height']         = $this->Settings->theight;
+                $this->image_lib->clear();
+                $this->image_lib->initialize($config);
+                if (!$this->image_lib->resize()) {
+                    echo $this->image_lib->display_errors();
+                }
+                if ($this->Settings->watermark) {
+                    $this->image_lib->clear();
+                    $wm['source_image']     = $this->upload_path . $photo;
+                    $wm['wm_text']          = 'Copyright ' . date('Y') . ' - ' . $this->Settings->site_name;
+                    $wm['wm_type']          = 'text';
+                    $wm['wm_font_path']     = 'system/fonts/texb.ttf';
+                    $wm['quality']          = '100';
+                    $wm['wm_font_size']     = '16';
+                    $wm['wm_font_color']    = '999999';
+                    $wm['wm_shadow_color']  = 'CCCCCC';
+                    $wm['wm_vrt_alignment'] = 'top';
+                    $wm['wm_hor_alignment'] = 'left';
+                    $wm['wm_padding']       = '10';
+                    $this->image_lib->initialize($wm);
+                    $this->image_lib->watermark();
+                }
+                $this->image_lib->clear();
+                $config = null;
+            }
+            ?>
             <div class="form-group">
                 <?= lang('parent_category', 'parent') ?>
                 <?php

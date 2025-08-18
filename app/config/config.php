@@ -18,7 +18,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/cajam-mult-store/';
+$config['base_url'] = 'https://mult-store.cajam.co.tz/';
 
 /*
 |--------------------------------------------------------------------------
@@ -381,8 +381,15 @@ $config['sess_regenerate_destroy'] = false;
 $config['cookie_prefix']   = 'sma_';
 $config['cookie_domain']   = '';
 $config['cookie_path']     = '/';
-$config['cookie_secure']   = false;
-$config['cookie_httponly'] = false;
+// Enable secure cookies when served over HTTPS (works behind proxies too)
+$is_https = (
+    (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) ||
+    (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+);
+$config['cookie_secure']   = $is_https;
+$config['cookie_httponly'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -430,7 +437,7 @@ $config['csrf_protection']   = true;
 $config['csrf_token_name']   = 'token';
 $config['csrf_cookie_name']  = 'token_cookie';
 $config['csrf_expire']       = 7200;
-$config['csrf_regenerate']   = false;
+$config['csrf_regenerate']   = true;
 $config['csrf_exclude_uris'] = ['pay/[a-z]+', 'admin/welcome/image_upload'];
 
 /*
