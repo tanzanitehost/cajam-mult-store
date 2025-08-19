@@ -30,12 +30,12 @@ body{
 }
 
 h1.inv {
-	color: #999;
-	font-weight: bolder;
-	font-size: 46px;
-	margin: 10px 0;
+    color: #5b2a4a;
+    font-weight: bolder;
+    font-size: 46px;
+    margin: 10px 0;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 }
-#inv_top { }
 #inv_top_left { width: 47%; padding: 0 2% 0 2px; float: left; display: block; }
 #inv_top_right { width: 48%; padding: 0; float: right; display: block; }
 .date { font-size:22px; font-weight: bold; color: #999;}
@@ -49,7 +49,13 @@ h1.inv {
 }
 
 .terms strong {
-	font-size: 16px;
+    font-size: 16px;
+}
+
+/* Section headings */
+h2, .supplier {
+    color: #5b2a4a;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.12);
 }
 .supplier { font-weight: bold; text-transform: capitalize; }
 .recipient-address {
@@ -159,16 +165,16 @@ hr {
 }
 
 .total-heading {
-	background: #e7ebee;
-	height: 24px;
-	color: #63676b;
-	text-shadow: 0 1px 1px #ffffff;
-	padding: 8px 20px 0 0;
-	-moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-	-webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-	box-shadow: inset 0px 0px 0px 1px rgba(255,255,255,0.5), 0 2px 2px rgba(0, 0, 0, 0.08);
-	border-bottom: 1px solid #d6dde2;
-	font-weight: bold;
+    background: #5b2a4a;
+    height: 24px;
+    color: #ffffff;
+    text-shadow: 0 1px 1px #ffffff;
+    padding: 8px 20px 0 0;
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0px 0px 0px 1px rgba(255,255,255,0.15), 0 2px 2px rgba(0, 0, 0, 0.08);
+    border-bottom: 2px solid #68b96e;
+    font-weight: bold;
 }
 
 .total-heading p, .total-amount p {
@@ -176,10 +182,10 @@ hr {
 }
 
 .total-amount {
-	padding: 15px 20px 15px 0;
-	color: #4d5357;
-	font-size: 14px;
-	font-weight: normal;
+    padding: 15px 20px 15px 0;
+    color: #4d5357;
+    font-size: 14px;
+    font-weight: normal;
 }
 
 table.tablesorter {
@@ -218,6 +224,3 @@ table.tablesorter thead tr .headerSortUp {
 table.tablesorter thead tr .headerSortDown {
 	background-image: url(../images/arrow-down.png);
 }
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-}
-

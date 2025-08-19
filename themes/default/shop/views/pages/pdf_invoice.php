@@ -7,6 +7,42 @@
     <title><?= lang('invoice') . ' ' . $inv->reference_no; ?></title>
     <link href="<?= base_url('themes/' . $Settings->theme . '/admin/assets/styles/pdf/bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="<?= base_url('themes/' . $Settings->theme . '/admin/assets/styles/pdf/pdf.css'); ?>" rel="stylesheet">
+    <style>
+        /* Brand colors */
+        /* Primary (purple) and Secondary (green) */
+        :root { /* not used by mPDF as variables, kept for readability */ }
+        .brand-purple { color: #5b2a4a !important; }
+        .brand-green  { color: #68b96e !important; }
+
+        /* Title (big invoice title) */
+        .title {
+            color: #5b2a4a !important;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+        }
+
+        /* Section headings (company name, recipient, small headings) */
+        h2 {
+            color: #5b2a4a !important;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+        }
+
+        /* Table headers */
+        .table th {
+            background-color: #5b2a4a !important;
+            color: #ffffff !important;
+            border-color: #68b96e !important;
+        }
+
+        /* Totals area: emphasize labels and add subtle edge */
+        tfoot td:first-child {
+            color: #5b2a4a !important;
+            font-weight: bold;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+        }
+        tfoot td {
+            border-top: 2px solid #68b96e !important;
+        }
+    </style>
 </head>
 
 <body>

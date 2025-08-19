@@ -53,24 +53,26 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        foreach ($groups as $group) {
-                            ?>
+                        <?php if (!empty($groups) && (is_array($groups) || is_object($groups))): ?>
+                            <?php foreach ($groups as $group): ?>
+                                <tr>
+                                    <td>
+                                        <div class="text-center"><input class="checkbox multi-select" type="checkbox" name="val[]"
+                                                       value="<?= $group->id ?>"/></div>
+                                    </td>
+                                    <td><?php echo $group->id; ?></td>
+                                    <td><?php echo $group->name; ?></td>
+                                    <td><?php echo $group->description; ?></td>
+                                    <td style="text-align:center;">
+                                        <?php echo '<a class="tip" title="' . $this->lang->line('change_permissions') . '" href="' . admin_url('system_settings/permissions/' . $group->id) . '"><i class="fa fa-tasks"></i></a> <a class="tip" title="' . $this->lang->line('edit_group') . '" data-toggle="modal" data-target="#myModal" href="' . admin_url('system_settings/edit_group/' . $group->id) . '"><i class="fa fa-edit"></i></a> <a href="#" class="tip po" title="' . $this->lang->line('delete_group') . '" data-content="<p>' . lang('r_u_sure') . '</p><a class=\'btn btn-danger\' href=\'' . admin_url('system_settings/delete_group/' . $group->id) . '\'>' . lang('i_m_sure') . '</a> <button class=\'btn po-close\'>' . lang('no') . '</button>"><i class="fa fa-trash-o"></i></a>'; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <tr>
-                                <td>
-                                    <div class="text-center"><input class="checkbox multi-select" type="checkbox" name="val[]"
-                                                   value="<?= $group->id ?>"/></div>
-                                </td>
-                                <td><?php echo $group->id; ?></td>
-                                <td><?php echo $group->name; ?></td>
-                                <td><?php echo $group->description; ?></td>
-                                <td style="text-align:center;">
-                                    <?php echo '<a class="tip" title="' . $this->lang->line('change_permissions') . '" href="' . admin_url('system_settings/permissions/' . $group->id) . '"><i class="fa fa-tasks"></i></a> <a class="tip" title="' . $this->lang->line('edit_group') . '" data-toggle="modal" data-target="#myModal" href="' . admin_url('system_settings/edit_group/' . $group->id) . '"><i class="fa fa-edit"></i></a> <a href="#" class="tip po" title="' . $this->lang->line('delete_group') . '" data-content="<p>' . lang('r_u_sure') . '</p><a class=\'btn btn-danger\' href=\'' . admin_url('system_settings/delete_group/' . $group->id) . '\'>' . lang('i_m_sure') . '</a> <button class=\'btn po-close\'>' . lang('no') . '</button>"><i class="fa fa-trash-o"></i></a>'; ?>
-                                </td>
+                                <td colspan="5" class="text-center"><?php echo lang('no_data_available'); ?></td>
                             </tr>
-                        <?php
-                        }
-                        ?>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

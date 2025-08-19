@@ -2642,8 +2642,10 @@ class Reports extends MY_Controller
     {
         $this->sma->checkPermissions();
         $data['error']               = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
-        $this->data['monthly_sales'] = $this->reports_model->getChartData();
-        $this->data['stock']         = $this->reports_model->getStockValue();
+        $monthly_sales               = $this->reports_model->getChartData();
+        $this->data['monthly_sales'] = $monthly_sales ? $monthly_sales : [];
+        $stock                       = $this->reports_model->getStockValue();
+        $this->data['stock']         = $stock ? $stock : (object) ['stock_by_price' => 0, 'stock_by_cost' => 0];
         $bc                          = [['link' => base_url(), 'page' => lang('home')], ['link' => '#', 'page' => lang('reports')]];
         $meta                        = ['page_title' => lang('reports'), 'bc' => $bc];
         $this->page_construct('reports/index', $meta, $this->data);

@@ -35,3 +35,41 @@
     .slider-container .carousel-caption { font-size: 0.85em; padding: 1px 5px; }
 }
 
+
+/* ------------------------------------------------------------------
+   Branding: Purple (#5b2a4a) and Green (#68b96e)
+   Scope: Shop titles, header/nav, submenu links
+   ------------------------------------------------------------------ */
+
+/* Page titles on shop pages */
+.page-contents h1,
+.page-contents h2,
+.page-contents h3 {
+    color: #5b2a4a !important;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+/* Top header links (pages, language, currency, auth) */
+.top-header a { color: #5b2a4a; }
+.top-header a:hover,
+.top-header a:focus { color: #5b2a4a; border-bottom: 2px solid #68b96e; text-decoration: none; }
+
+/* Navbar primary links and border */
+.navbar.navbar-default { border-bottom: 2px solid #68b96e; }
+.navbar-default .navbar-nav > li > a { color: #5b2a4a; }
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus { color: #5b2a4a; background-color: rgba(104,185,110,0.12); }
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover { color: #5b2a4a; background-color: rgba(104,185,110,0.18); }
+
+/* Mobile navbar toggle */
+.navbar-default .navbar-toggle { border-color: #68b96e; }
+.navbar-default .navbar-toggle .icon-bar { background-color: #5b2a4a; }
+
+/* Dropdown/submenu links */
+.dropdown-menu { border-top: 2px solid #68b96e; }
+.dropdown-menu > li > a { color: #5b2a4a; }
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus { background-color: #5b2a4a; color: #ffffff; }
+.dropdown-menu .divider { background-color: #68b96e; }

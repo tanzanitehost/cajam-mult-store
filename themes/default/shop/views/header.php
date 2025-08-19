@@ -11,6 +11,37 @@
     <link href="<?= $assets; ?>css/libs.min.css" rel="stylesheet">
     <link href="<?= $assets; ?>css/styles.min.css" rel="stylesheet">
     <link href="<?= base_url('assets/custom/shop.css') ?>" rel="stylesheet"/>
+    <style>
+        /* Branding: Purple (#5b2a4a) and Green (#68b96e) with safe contrast */
+        /* Page titles */
+        .page-contents h1,
+        .page-contents h2,
+        .page-contents h3 { color: #5b2a4a !important; text-shadow: 0 1px 0 rgba(0,0,0,0.12); }
+
+        /* Top header links */
+        .top-header a { color: #5b2a4a; }
+        .top-header a:hover, .top-header a:focus { color: #5b2a4a; border-bottom: 2px solid #68b96e; text-decoration: none; }
+
+        /* Navbar borders and links */
+        .navbar.navbar-default { border-bottom: 2px solid #68b96e; }
+        .navbar-default .navbar-nav > li > a { color: #5b2a4a; }
+        .navbar-default .navbar-nav > li > a:hover,
+        .navbar-default .navbar-nav > li > a:focus { color: #5b2a4a; background-color: rgba(104,185,110,0.12); }
+        .navbar-default .navbar-nav > .active > a,
+        .navbar-default .navbar-nav > .active > a:focus,
+        .navbar-default .navbar-nav > .active > a:hover { color: #5b2a4a; background-color: rgba(104,185,110,0.18); }
+
+        /* Mobile toggle */
+        .navbar-default .navbar-toggle { border-color: #68b96e; }
+        .navbar-default .navbar-toggle .icon-bar { background-color: #5b2a4a; }
+
+        /* Dropdown and submenu links */
+        .dropdown-menu { border-top: 2px solid #68b96e; }
+        .dropdown-menu > li > a { color: #5b2a4a; }
+        .dropdown-menu > li > a:hover,
+        .dropdown-menu > li > a:focus { background-color: #5b2a4a; color: #ffffff; }
+        .dropdown-menu .divider { background-color: #68b96e; }
+    </style>
     <meta property="og:url" content="<?= isset($product) && !empty($product) ? site_url('product/' . $product->slug) : site_url(); ?>" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?= $page_title; ?>" />
@@ -308,8 +339,8 @@
             <div class="container">
                 <div class="alert alert-info margin-bottom-no">
                     <p>
-                        <strong>Shop module is not complete item but add-on to Stock Manager Advance and is available separately.</strong><br>
-                        This is joint demo for main item (Stock Manager Advance) and add-ons (POS & Shop Module). Please check the item page on codecanyon.net for more info about what's not included in the item and you must read the page there before purchase. Thank you
+                        <strong>Shop module is not complete item but add-on to Cajam mult-store and is available separately.</strong><br>
+                        This is joint demo for main item (Cajam mult-store) and add-ons (POS & Shop Module). Please check the item page on codecanyon.net for more info about what's not included in the item and you must read the page there before purchase. Thank you
                     </p>
                 </div>
             </div>

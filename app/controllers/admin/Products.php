@@ -191,9 +191,9 @@ class Products extends MY_Controller
             if ($_FILES['product_image']['size'] > 0) {
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['max_filename']  = 25;
                 $config['encrypt_name']  = true;
@@ -240,9 +240,9 @@ class Products extends MY_Controller
             if ($_FILES['userfile']['name'][0] != '') {
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -1059,9 +1059,9 @@ class Products extends MY_Controller
             if ($_FILES['product_image']['size'] > 0) {
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -1108,9 +1108,9 @@ class Products extends MY_Controller
             if ($_FILES['userfile']['name'][0] != '') {
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;

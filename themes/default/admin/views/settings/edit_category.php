@@ -37,7 +37,7 @@
             </div>
             <?php
             // $image = ((isset($_POST['image']) && !empty($_POST['image'])) ? $_POST['image'] : $category->image);
-            if ($_FILES['userfile']['size'] > 0) {
+            if (isset($_FILES['userfile']) && is_array($_FILES['userfile']) && !empty($_FILES['userfile']['name']) && (int)($_FILES['userfile']['size'] ?? 0) > 0) {
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;

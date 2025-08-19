@@ -99,8 +99,9 @@ class Cron_model extends CI_Model
             $msg_with_yesterday_report = $table_html;
             $owners                    = $this->db->get_where('users', ['group_id' => 1])->result();
             $this->load->library('email');
-            $config['useragent'] = 'Stock Manager Advance';
-            $config['protocol']  = $this->Settings->protocol;
+            $config['useragent'] = 'Cajam mult-store';
+            $protocol = is_https() ? 'https://' : 'http://';
+            $config['protocol']  = $protocol;
             $config['mailtype']  = 'html';
             $config['crlf']      = "\r\n";
             $config['newline']   = "\r\n";

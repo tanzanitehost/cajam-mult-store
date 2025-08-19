@@ -54,7 +54,7 @@
     </div>
     <?php echo form_close(); ?>
 </div>
-<?php if ($_FILES['userfile']['size'] > 0) {
+<?php if (isset($_FILES['userfile']) && is_array($_FILES['userfile']) && !empty($_FILES['userfile']['name']) && (int)($_FILES['userfile']['size'] ?? 0) > 0) {
     $this->load->library('upload');
     $config['upload_path']   = $this->upload_path;
     $config['allowed_types'] = $this->image_types;
@@ -119,6 +119,7 @@
     $this->image_lib->clear();
     $config = null;
 }
+?>
 <script type="text/javascript" src="<?= $assets ?>js/custom.js"></script>
 <?= $modal_js ?>
 <script>

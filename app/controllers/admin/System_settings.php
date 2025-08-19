@@ -45,9 +45,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -110,9 +110,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -124,15 +124,29 @@ class system_settings extends MY_Controller
                 }
                 $photo         = $this->upload->file_name;
                 $data['image'] = $photo;
+                // Resize original image first
                 $this->load->library('image_lib');
-                $config['image_library']  = 'gd2';
-                $config['source_image']   = $this->upload_path . $photo;
-                $config['new_image']      = $this->thumbs_path . $photo;
-                $config['maintain_ratio'] = true;
-                $config['width']          = $this->Settings->twidth;
-                $config['height']         = $this->Settings->theight;
+                $resize_config['image_library']  = 'gd2';
+                $resize_config['source_image']   = $this->upload_path . $photo;
+                $resize_config['maintain_ratio'] = true;
+                $resize_config['width']          = $this->Settings->iwidth;
+                $resize_config['height']         = $this->Settings->iheight;
                 $this->image_lib->clear();
-                $this->image_lib->initialize($config);
+                $this->image_lib->initialize($resize_config);
+                if (!$this->image_lib->resize()) {
+                    $this->session->set_flashdata('error', $this->image_lib->display_errors());
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
+
+                // Then create the thumbnail
+                $thumb_config['image_library']  = 'gd2';
+                $thumb_config['source_image']   = $this->upload_path . $photo;
+                $thumb_config['new_image']      = $this->thumbs_path . $photo;
+                $thumb_config['maintain_ratio'] = true;
+                $thumb_config['width']          = $this->Settings->twidth;
+                $thumb_config['height']         = $this->Settings->theight;
+                $this->image_lib->clear();
+                $this->image_lib->initialize($thumb_config);
                 if (!$this->image_lib->resize()) {
                     echo $this->image_lib->display_errors();
                 }
@@ -369,9 +383,9 @@ class system_settings extends MY_Controller
 
                 $config['upload_path']   = 'assets/uploads/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = '2000';
-                $config['max_height']    = '2000';
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -623,9 +637,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path . 'logos/';
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = 300;
-                $config['max_height']    = 80;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['max_filename']  = 25;
                 //$config['encrypt_name'] = TRUE;
@@ -643,9 +657,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path . 'logos/';
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = 300;
-                $config['max_height']    = 80;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['max_filename']  = 25;
                 //$config['encrypt_name'] = TRUE;
@@ -663,9 +677,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path . 'logos/';
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = 300;
-                $config['max_height']    = 80;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['max_filename']  = 25;
                 //$config['encrypt_name'] = TRUE;
@@ -1054,9 +1068,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -1127,9 +1141,9 @@ class system_settings extends MY_Controller
                 $this->load->library('upload');
                 $config['upload_path']   = $this->upload_path;
                 $config['allowed_types'] = $this->image_types;
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = $this->Settings->iwidth;
-                $config['max_height']    = $this->Settings->iheight;
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -1482,9 +1496,9 @@ class system_settings extends MY_Controller
 
                 $config['upload_path']   = 'assets/uploads/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
-                $config['max_size']      = $this->allowed_file_size;
-                $config['max_width']     = '2000';
-                $config['max_height']    = '2000';
+                $config['max_size']      = 0;
+                $config['max_width']     = 0;
+                $config['max_height']    = 0;
                 $config['overwrite']     = false;
                 $config['encrypt_name']  = true;
                 $config['max_filename']  = 25;
@@ -2124,23 +2138,25 @@ class system_settings extends MY_Controller
                 $lang = $language;
             } else {
                 $this->session->set_flashdata('error', lang('language_x_found'));
-                admin_redirect('system_settings');
                 $lang = 'english';
             }
+            
+            // Capture optional tax settings if present
+            $tax1 = $this->input->post('tax1');
+            $tax2 = $this->input->post('tax2');
 
-            $tax1 = ($this->input->post('tax_rate') != 0) ? 1 : 0;
-            $tax2 = ($this->input->post('tax_rate2') != 0) ? 1 : 0;
-
-            $data = ['site_name' => DEMO ? 'Stock Manager Advance' : $this->input->post('site_name'),
-                'rows_per_page'  => $this->input->post('rows_per_page'),
-                'dateformat'     => $this->input->post('dateformat'),
-                'timezone'       => DEMO ? 'Asia/Kuala_Lumpur' : $this->input->post('timezone'),
-                'mmode'          => trim($this->input->post('mmode')),
-                'iwidth'         => $this->input->post('iwidth'),
-                'iheight'        => $this->input->post('iheight'),
-                'twidth'         => $this->input->post('twidth'),
-                'theight'        => $this->input->post('theight'),
-                'watermark'      => $this->input->post('watermark'),
+            // Build settings data
+            $data = [
+                'site_name'            => $this->input->post('site_name'),
+                'dateformat'           => $this->input->post('dateformat'),
+                'timezone'             => $this->input->post('timezone'),
+                'mmode'                => $this->input->post('mmode'),
+                'rows_per_page'        => $this->input->post('rows_per_page'),
+                'iwidth'               => $this->input->post('iwidth'),
+                'iheight'              => $this->input->post('iheight'),
+                'twidth'               => $this->input->post('twidth'),
+                'theight'              => $this->input->post('theight'),
+                'watermark'            => $this->input->post('watermark'),
                 // 'reg_ver' => $this->input->post('reg_ver'),
                 // 'allow_reg' => $this->input->post('allow_reg'),
                 // 'reg_notification' => $this->input->post('reg_notification'),
@@ -2818,7 +2834,8 @@ class system_settings extends MY_Controller
 
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
 
-        $this->data['groups'] = $this->settings_model->getGroups();
+        $groups = $this->settings_model->getGroups();
+        $this->data['groups'] = is_array($groups) ? $groups : (!empty($groups) ? (array) $groups : []);
         $bc                   = [['link' => base_url(), 'page' => lang('home')], ['link' => admin_url('system_settings'), 'page' => lang('system_settings')], ['link' => '#', 'page' => lang('groups')]];
         $meta                 = ['page_title' => lang('groups'), 'bc' => $bc];
         $this->page_construct('settings/user_groups', $meta, $this->data);

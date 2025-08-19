@@ -1,0 +1,19 @@
+Code,Name,Slug,Image name,Parent Category Code (optional),Description
+P1,Poultry Products,poultry-products,p1.png,,Pig meat, piglets, organic manure
+SP1_1,Broiler Chicken,broiler-chicken,sp1_1.png,P1,Broiler chicken products from brands like FarmFresh, CluckKing, OrganicNest
+SP1_2,Layer Chicken,layer-chicken,sp1_2.png,P1,Layer chicken products from brands like FarmFresh, CluckKing, OrganicNest
+SP1_3,Organic Eggs,organic-eggs,sp1_3.png,P1,Organic eggs from brands like FarmFresh, CluckKing, OrganicNest
+I1,Industrial Processing Products,industrial-processing-products,i1.png,,Sunflower cooking oil, sunflower cake, etc.
+SI1_1,Sunflower Oil,sunflower-oil,si1_1.png,I1,Sunflower oil products from brands like SunGold, AgroPure, OilMasters
+SI1_2,Sunflower Cake,sunflower-cake,si1_2.png,I1,Sunflower cake products from brands like SunGold, AgroPure, OilMasters
+SI1_3,Soybean Oil,soybean-oil,si1_3.png,I1,Soybean oil products from brands like SunGold, AgroPure, OilMasters
+D1,Domestic Products,domestic-products,d1.png,,Food products and other home-use items
+SD1_1,Rice,rice,sd1_1.png,D1,Rice products from brands like HomeEase, DailyMart, KitchenJoy
+SD1_2,Sugar,sugar,sd1_2.png,D1,Sugar products from brands like HomeEase, DailyMart, KitchenJoy
+SD1_3,Cooking Salt,cooking-salt,sd1_3.png,D1,Cooking salt products from brands like HomeEase, DailyMart, KitchenJoy
+SD1_4,Soap,soap,sd1_4.png,D1,Soap products from brands like HomeEase, DailyMart, KitchenJoy
+A1,Agriculture Products,agriculture-products,a1.png,,Crops like cashew nuts, groundnuts, etc.
+SA1_1,Cashew Nuts,cashew-nuts,sa1_1.png,A1,Cashew nut products from brands like AgroHarvest, GreenField, CropKing
+SA1_2,Groundnuts,groundnuts,sa1_2.png,A1,Groundnut products from brands like AgroHarvest, GreenField, CropKing
+SA1_3,Maize,maize,sa1_3.png,A1,Maize products from brands like AgroHarvest, GreenField, CropKing
+SA1_4,Wheat,wheat,sa1_4.png,A1,Wheat products from brands like AgroHarvest, GreenField, CropKing
