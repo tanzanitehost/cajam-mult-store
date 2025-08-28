@@ -74,7 +74,9 @@ class MY_Controller extends CI_Controller
             } else {
                 define('SHOP', 0);
             }
-            if (!$this->Owner && !$this->Admin) {
+            // Load group permissions for all non-owner users (including Admin),
+            // so views that rely on $GP can render appropriately.
+            if (!$this->Owner) {
                 $gp               = $this->site->checkPermissions();
                 $this->GP         = !empty($gp) ? $gp[0] : false;
                 $this->data['GP'] = !empty($gp) ? $gp[0] : false;

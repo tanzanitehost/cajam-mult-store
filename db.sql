@@ -1,0 +1,2698 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Aug 19, 2025 at 03:33 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.2.26
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `msa`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE IF NOT EXISTS `groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `description`) VALUES
+(1, 'owner', 'Owner'),
+(2, 'admin', 'Administrator'),
+(3, 'customer', 'Default Customer');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `settings`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `settings`;
+CREATE TABLE IF NOT EXISTS `settings` (
+`accounting_method` tinyint
+,`allow_reg` tinyint(1)
+,`apis` tinyint(1)
+,`attributes` tinyint(1)
+,`auto_detect_barcode` tinyint(1)
+,`auto_reg` tinyint(1)
+,`barcode_img` tinyint(1)
+,`barcode_separator` varchar(2)
+,`bc_fix` tinyint
+,`ca_point` tinyint
+,`captcha` tinyint(1)
+,`corn` datetime
+,`customer_group` int
+,`dateformat` int
+,`decimals` tinyint
+,`decimals_sep` varchar(2)
+,`default_biller` int
+,`default_currency` varchar(3)
+,`default_discount` int
+,`default_email` varchar(100)
+,`default_tax_rate` int
+,`default_tax_rate2` int
+,`default_warehouse` int
+,`delivery_prefix` varchar(20)
+,`disable_editing` smallint
+,`discount_method` tinyint
+,`display_all_products` tinyint(1)
+,`display_symbol` tinyint(1)
+,`each_sale` decimal(15,4)
+,`each_spent` decimal(15,4)
+,`envato_username` varchar(50)
+,`expense_prefix` varchar(20)
+,`flag_chars` tinyint
+,`iheight` int
+,`invoice_view` tinyint(1)
+,`item_addition` tinyint(1)
+,`item_code_chars` tinyint
+,`item_code_start` tinyint
+,`iwidth` int
+,`ksa_qrcode` tinyint(1)
+,`language` varchar(20)
+,`logo` varchar(255)
+,`logo2` varchar(255)
+,`mailpath` varchar(55)
+,`mmode` tinyint(1)
+,`overselling` tinyint(1)
+,`payment_prefix` varchar(20)
+,`pdf_lib` varchar(20)
+,`ppayment_prefix` varchar(20)
+,`price_chars` tinyint
+,`price_divide_by` int
+,`price_group` int
+,`price_start` tinyint
+,`product_discount` tinyint(1)
+,`product_expiry` tinyint(1)
+,`product_serial` tinyint
+,`protocol` varchar(20)
+,`purchase_code` varchar(100)
+,`purchase_prefix` varchar(20)
+,`qa_prefix` varchar(55)
+,`qty_decimals` tinyint
+,`quote_prefix` varchar(20)
+,`racks` tinyint(1)
+,`reference_format` tinyint(1)
+,`reg_notification` tinyint(1)
+,`reg_ver` tinyint(1)
+,`remove_expired` tinyint(1)
+,`restrict_calendar` tinyint
+,`restrict_user` tinyint
+,`return_prefix` varchar(20)
+,`returnp_prefix` varchar(20)
+,`rows_per_page` int
+,`rtl` tinyint(1)
+,`sa_point` tinyint
+,`sac` tinyint(1)
+,`sales_prefix` varchar(20)
+,`set_focus` tinyint(1)
+,`setting_id` int
+,`site_name` varchar(55)
+,`smtp_crypto` varchar(10)
+,`smtp_host` varchar(100)
+,`smtp_pass` varchar(255)
+,`smtp_port` varchar(10)
+,`smtp_user` varchar(100)
+,`state` varchar(100)
+,`symbol` varchar(50)
+,`tax1` tinyint
+,`tax2` tinyint
+,`theight` int
+,`theme` varchar(20)
+,`thousands_sep` varchar(2)
+,`timezone` varchar(100)
+,`transfer_prefix` varchar(20)
+,`twidth` int
+,`update` tinyint(1)
+,`update_cost` tinyint(1)
+,`use_code_for_slug` tinyint(1)
+,`version` varchar(10)
+,`watermark` tinyint(1)
+,`weight_chars` tinyint
+,`weight_divide_by` int
+,`weight_start` tinyint
+,`ws_barcode_chars` tinyint
+,`ws_barcode_type` varchar(10)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_addresses`
+--
+
+DROP TABLE IF EXISTS `sma_addresses`;
+CREATE TABLE IF NOT EXISTS `sma_addresses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `company_id` int NOT NULL,
+  `line1` varchar(50) NOT NULL,
+  `line2` varchar(50) DEFAULT NULL,
+  `city` varchar(25) NOT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `state` varchar(25) NOT NULL,
+  `country` varchar(50) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `company_id` (`company_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_adjustments`
+--
+
+DROP TABLE IF EXISTS `sma_adjustments`;
+CREATE TABLE IF NOT EXISTS `sma_adjustments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL,
+  `reference_no` varchar(55) NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `note` text,
+  `attachment` varchar(55) DEFAULT NULL,
+  `created_by` int NOT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `count_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_adjustment_items`
+--
+
+DROP TABLE IF EXISTS `sma_adjustment_items`;
+CREATE TABLE IF NOT EXISTS `sma_adjustment_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `adjustment_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `option_id` int DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `type` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `adjustment_id` (`adjustment_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_api_keys`
+--
+
+DROP TABLE IF EXISTS `sma_api_keys`;
+CREATE TABLE IF NOT EXISTS `sma_api_keys` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `reference` varchar(40) NOT NULL,
+  `key` varchar(40) NOT NULL,
+  `level` int NOT NULL,
+  `ignore_limits` tinyint(1) NOT NULL DEFAULT '0',
+  `is_private_key` tinyint(1) NOT NULL DEFAULT '0',
+  `ip_addresses` text,
+  `date_created` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_api_limits`
+--
+
+DROP TABLE IF EXISTS `sma_api_limits`;
+CREATE TABLE IF NOT EXISTS `sma_api_limits` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uri` varchar(255) NOT NULL,
+  `count` int NOT NULL,
+  `hour_started` int NOT NULL,
+  `api_key` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_api_logs`
+--
+
+DROP TABLE IF EXISTS `sma_api_logs`;
+CREATE TABLE IF NOT EXISTS `sma_api_logs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uri` varchar(255) NOT NULL,
+  `method` varchar(6) NOT NULL,
+  `params` text,
+  `api_key` varchar(40) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` int NOT NULL,
+  `rtime` float DEFAULT NULL,
+  `authorized` varchar(1) NOT NULL,
+  `response_code` smallint DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_attachments`
+--
+
+DROP TABLE IF EXISTS `sma_attachments`;
+CREATE TABLE IF NOT EXISTS `sma_attachments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subject_id` int NOT NULL,
+  `subject_type` varchar(55) NOT NULL,
+  `file_name` varchar(100) NOT NULL,
+  `orig_name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_attachments`
+--
+
+INSERT INTO `sma_attachments` (`id`, `subject_id`, `subject_type`, `file_name`, `orig_name`) VALUES
+(1, 1, 'purchase', '35c42f4febee57a821ea5c6175acf311.pdf', 'ELIASI_ID.pdf');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_brands`
+--
+
+DROP TABLE IF EXISTS `sma_brands`;
+CREATE TABLE IF NOT EXISTS `sma_brands` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
+  `image` varchar(50) DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_brands`
+--
+
+INSERT INTO `sma_brands` (`id`, `code`, `name`, `image`, `slug`, `description`) VALUES
+(1, 'FF', 'FarmFresh', 'farmfresh.png', 'farmfresh', 'FarmFresh poultry and egg products'),
+(2, 'CK', 'CluckKing', 'cluckking.png', 'cluckking', 'CluckKing poultry and livestock products'),
+(3, 'ON', 'OrganicNest', 'organicnest.png', 'organicnest', 'OrganicNest organic poultry and livestock'),
+(4, 'SG', 'SunGold', 'sungold.png', 'sungold', 'SunGold oil products'),
+(5, 'AP', 'AgroPure', 'agropure.png', 'agropure', 'AgroPure oil and related products'),
+(6, 'OM', 'OilMasters', 'oilmasters.png', 'oilmasters', 'OilMasters oil and by-products'),
+(7, 'HE', 'HomeEase', 'homeease.png', 'homeease', 'HomeEase domestic products'),
+(8, 'DM', 'DailyMart', 'dailymart.png', 'dailymart', 'DailyMart household essentials'),
+(9, 'KJ', 'KitchenJoy', 'kitchenjoy.png', 'kitchenjoy', 'KitchenJoy food and dairy products'),
+(10, 'AH', 'AgroHarvest', 'agroharvest.png', 'agroharvest', 'AgroHarvest agricultural products'),
+(11, 'GF', 'GreenField', 'greenfield.png', 'greenfield', 'GreenField crops and seeds'),
+(12, 'CKG', 'CropKing', 'cropking.png', 'cropking', 'CropKing agricultural products');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_calendar`
+--
+
+DROP TABLE IF EXISTS `sma_calendar`;
+CREATE TABLE IF NOT EXISTS `sma_calendar` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime DEFAULT NULL,
+  `color` varchar(7) NOT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_captcha`
+--
+
+DROP TABLE IF EXISTS `sma_captcha`;
+CREATE TABLE IF NOT EXISTS `sma_captcha` (
+  `captcha_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `captcha_time` int UNSIGNED NOT NULL,
+  `ip_address` varchar(16) NOT NULL DEFAULT '0',
+  `word` varchar(20) NOT NULL,
+  PRIMARY KEY (`captcha_id`),
+  KEY `word` (`word`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_cart`
+--
+
+DROP TABLE IF EXISTS `sma_cart`;
+CREATE TABLE IF NOT EXISTS `sma_cart` (
+  `id` varchar(40) NOT NULL,
+  `time` varchar(30) NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `data` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_categories`
+--
+
+DROP TABLE IF EXISTS `sma_categories`;
+CREATE TABLE IF NOT EXISTS `sma_categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(55) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `image` varchar(55) DEFAULT NULL,
+  `parent_id` int DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_categories`
+--
+
+INSERT INTO `sma_categories` (`id`, `code`, `name`, `image`, `parent_id`, `slug`, `description`) VALUES
+(19, 'SP1_2', 'Layer Chicken', 'sp1_2.png', 14, 'layer-chicken', 'Layer chicken products from brands like FarmFresh'),
+(18, 'SP1_1', 'Broiler Chicken', 'sp1_1.png', 14, 'broiler-chicken', 'Broiler chicken products from brands like FarmFresh'),
+(17, 'A1', 'Agriculture Products', 'b257a3b641c0d2c0123d4ffdfde3cea9.jpg', 0, 'agriculture-products', 'Crops like cashew nuts'),
+(16, 'D1', 'Domestic Products', 'd1.png', NULL, 'domestic-products', 'Food products and other home-use items'),
+(15, 'I1', 'Industrial Processing Products', 'i1.png', NULL, 'industrial-processing-products', 'Sunflower cooking oil'),
+(14, 'P1', 'Poultry Products', 'p1.png', NULL, 'poultry-products', 'Pig meat'),
+(20, 'SP1_3', 'Organic Eggs', 'sp1_3.png', 14, 'organic-eggs', 'Organic eggs from brands like FarmFresh'),
+(21, 'SI1_1', 'Sunflower Oil', 'si1_1.png', 15, 'sunflower-oil', 'Sunflower oil products from brands like SunGold'),
+(22, 'SI1_2', 'Sunflower Cake', 'si1_2.png', 15, 'sunflower-cake', 'Sunflower cake products from brands like SunGold'),
+(23, 'SI1_3', 'Soybean Oil', 'si1_3.png', 15, 'soybean-oil', 'Soybean oil products from brands like SunGold'),
+(24, 'SD1_1', 'Rice', 'sd1_1.png', 16, 'rice', 'Rice products from brands like HomeEase'),
+(25, 'SD1_2', 'Sugar', 'sd1_2.png', 16, 'sugar', 'Sugar products from brands like HomeEase'),
+(26, 'SD1_3', 'Cooking Salt', 'sd1_3.png', 16, 'cooking-salt', 'Cooking salt products from brands like HomeEase'),
+(27, 'SD1_4', 'Soap', 'sd1_4.png', 16, 'soap', 'Soap products from brands like HomeEase'),
+(28, 'SA1_1', 'Cashew Nuts', 'sa1_1.png', 17, 'cashew-nuts', 'Cashew nut products from brands like AgroHarvest'),
+(29, 'SA1_2', 'Groundnuts', 'sa1_2.png', 17, 'groundnuts', 'Groundnut products from brands like AgroHarvest'),
+(30, 'SA1_3', 'Maize', 'sa1_3.png', 17, 'maize', 'Maize products from brands like AgroHarvest'),
+(31, 'SA1_4', 'Wheat', 'sa1_4.png', 17, 'wheat', 'Wheat products from brands like AgroHarvest'),
+(32, 'L1', 'Livestock Products', 'l1.png', NULL, 'livestock-products', 'Pig meat and piglets');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_combo_items`
+--
+
+DROP TABLE IF EXISTS `sma_combo_items`;
+CREATE TABLE IF NOT EXISTS `sma_combo_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `item_code` varchar(20) NOT NULL,
+  `quantity` decimal(12,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_companies`
+--
+
+DROP TABLE IF EXISTS `sma_companies`;
+CREATE TABLE IF NOT EXISTS `sma_companies` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_id` int UNSIGNED DEFAULT NULL,
+  `group_name` varchar(20) NOT NULL,
+  `customer_group_id` int DEFAULT NULL,
+  `customer_group_name` varchar(100) DEFAULT NULL,
+  `name` varchar(55) NOT NULL,
+  `company` varchar(255) NOT NULL,
+  `vat_no` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `city` varchar(55) DEFAULT NULL,
+  `state` varchar(55) DEFAULT NULL,
+  `postal_code` varchar(8) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `cf1` varchar(100) DEFAULT NULL,
+  `cf2` varchar(100) DEFAULT NULL,
+  `cf3` varchar(100) DEFAULT NULL,
+  `cf4` varchar(100) DEFAULT NULL,
+  `cf5` varchar(100) DEFAULT NULL,
+  `cf6` varchar(100) DEFAULT NULL,
+  `invoice_footer` text,
+  `payment_term` int DEFAULT '0',
+  `logo` varchar(255) DEFAULT 'logo.png',
+  `award_points` int DEFAULT '0',
+  `deposit_amount` decimal(25,4) DEFAULT NULL,
+  `price_group_id` int DEFAULT NULL,
+  `price_group_name` varchar(50) DEFAULT NULL,
+  `gst_no` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `group_id_2` (`group_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_companies`
+--
+
+INSERT INTO `sma_companies` (`id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`, `deposit_amount`, `price_group_id`, `price_group_name`, `gst_no`) VALUES
+(1, 3, 'customer', 1, 'General', 'Walk-in Customer', 'Walk-in Customer', '', 'Customer Address', 'kongwa', 'Dodoma', '46000', 'Tanzania', '0123456789', 'customer@store.cajam.co.tz', '', '', '', '', '', '', NULL, 0, 'logo.png', 0, 500000.0000, NULL, NULL, ''),
+(2, 4, 'supplier', NULL, NULL, 'Test Supplier', 'Supplier Company Name', '', 'Dzm', 'dms', 'Ubungo', '46050', 'Tanzania', '0123456789', 'customer@store.cajam.co.tz', '-', '-', '-', '-', '-', '-', NULL, 0, 'logo.png', 0, NULL, NULL, NULL, ''),
+(3, NULL, 'biller', NULL, NULL, 'Mian Saleem', 'Test Biller', '5555', 'Biller adddress', 'City', '', '', 'Country', '012345678', 'customer@store.cajam.co.tz', '', '', '', '', '', '', ' Thank you for shopping with us. Please come again', 0, 'header_logo.png', 0, NULL, NULL, NULL, ''),
+(4, 4, 'supplier', NULL, NULL, 'AgroSupplier', 'AgroSupplier Ltd', '', 'AgroSupplier Address', 'DAR ES SALAAM', 'Ubungo', '46050', 'Tanzania', '0123456789', 'customer@store.cajam.co.tz', '', '', '', '', '', '', NULL, 0, 'logo.png', 0, NULL, NULL, NULL, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_costing`
+--
+
+DROP TABLE IF EXISTS `sma_costing`;
+CREATE TABLE IF NOT EXISTS `sma_costing` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `product_id` int DEFAULT NULL,
+  `sale_item_id` int NOT NULL,
+  `sale_id` int DEFAULT NULL,
+  `purchase_item_id` int DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `purchase_net_unit_cost` decimal(25,4) DEFAULT NULL,
+  `purchase_unit_cost` decimal(25,4) DEFAULT NULL,
+  `sale_net_unit_price` decimal(25,4) NOT NULL,
+  `sale_unit_price` decimal(25,4) NOT NULL,
+  `quantity_balance` decimal(15,4) DEFAULT NULL,
+  `inventory` tinyint(1) DEFAULT '0',
+  `overselling` tinyint(1) DEFAULT '0',
+  `option_id` int DEFAULT NULL,
+  `purchase_id` int DEFAULT NULL,
+  `transfer_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_currencies`
+--
+
+DROP TABLE IF EXISTS `sma_currencies`;
+CREATE TABLE IF NOT EXISTS `sma_currencies` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(5) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `rate` decimal(12,4) NOT NULL,
+  `auto_update` tinyint(1) NOT NULL DEFAULT '0',
+  `symbol` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_currencies`
+--
+
+INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`, `symbol`) VALUES
+(1, 'USD', 'US Dollar', 1.0000, 0, NULL),
+(3, 'TZS', 'Tanzania Shilling', 2540.0000, 1, 'Tsh');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_customer_groups`
+--
+
+DROP TABLE IF EXISTS `sma_customer_groups`;
+CREATE TABLE IF NOT EXISTS `sma_customer_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `percent` int NOT NULL,
+  `discount` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_customer_groups`
+--
+
+INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`, `discount`) VALUES
+(1, 'General', 0, NULL),
+(2, 'Reseller', -5, NULL),
+(3, 'Distributor', -15, NULL),
+(4, 'New Customer (+10)', 10, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_date_format`
+--
+
+DROP TABLE IF EXISTS `sma_date_format`;
+CREATE TABLE IF NOT EXISTS `sma_date_format` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `js` varchar(20) NOT NULL,
+  `php` varchar(20) NOT NULL,
+  `sql` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_date_format`
+--
+
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES
+(1, 'mm-dd-yyyy', 'm-d-Y', '%m-%d-%Y'),
+(2, 'mm/dd/yyyy', 'm/d/Y', '%m/%d/%Y'),
+(3, 'mm.dd.yyyy', 'm.d.Y', '%m.%d.%Y'),
+(4, 'dd-mm-yyyy', 'd-m-Y', '%d-%m-%Y'),
+(5, 'dd/mm/yyyy', 'd/m/Y', '%d/%m/%Y'),
+(6, 'dd.mm.yyyy', 'd.m.Y', '%d.%m.%Y');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_deliveries`
+--
+
+DROP TABLE IF EXISTS `sma_deliveries`;
+CREATE TABLE IF NOT EXISTS `sma_deliveries` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sale_id` int NOT NULL,
+  `do_reference_no` varchar(50) NOT NULL,
+  `sale_reference_no` varchar(50) NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `address` varchar(1000) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `status` varchar(15) DEFAULT NULL,
+  `attachment` varchar(50) DEFAULT NULL,
+  `delivered_by` varchar(50) DEFAULT NULL,
+  `received_by` varchar(50) DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_deposits`
+--
+
+DROP TABLE IF EXISTS `sma_deposits`;
+CREATE TABLE IF NOT EXISTS `sma_deposits` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `company_id` int NOT NULL,
+  `amount` decimal(25,4) NOT NULL,
+  `paid_by` varchar(50) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `created_by` int NOT NULL,
+  `updated_by` int NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_deposits`
+--
+
+INSERT INTO `sma_deposits` (`id`, `date`, `company_id`, `amount`, `paid_by`, `note`, `created_by`, `updated_by`, `updated_at`) VALUES
+(1, '2025-08-19 02:55:00', 1, 500000.0000, 'JUMA', '<p>Thanks </p>', 1, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_expenses`
+--
+
+DROP TABLE IF EXISTS `sma_expenses`;
+CREATE TABLE IF NOT EXISTS `sma_expenses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference` varchar(50) NOT NULL,
+  `amount` decimal(25,4) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `created_by` varchar(55) NOT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_expense_categories`
+--
+
+DROP TABLE IF EXISTS `sma_expense_categories`;
+CREATE TABLE IF NOT EXISTS `sma_expense_categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(55) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_gift_cards`
+--
+
+DROP TABLE IF EXISTS `sma_gift_cards`;
+CREATE TABLE IF NOT EXISTS `sma_gift_cards` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `card_no` varchar(20) NOT NULL,
+  `value` decimal(25,4) NOT NULL,
+  `customer_id` int DEFAULT NULL,
+  `customer` varchar(255) DEFAULT NULL,
+  `balance` decimal(25,4) NOT NULL,
+  `expiry` date DEFAULT NULL,
+  `created_by` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `card_no` (`card_no`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_gift_card_topups`
+--
+
+DROP TABLE IF EXISTS `sma_gift_card_topups`;
+CREATE TABLE IF NOT EXISTS `sma_gift_card_topups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL,
+  `card_id` int NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `created_by` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `card_id` (`card_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_groups`
+--
+
+DROP TABLE IF EXISTS `sma_groups`;
+CREATE TABLE IF NOT EXISTS `sma_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_groups`
+--
+
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES
+(1, 'owner', 'Owner'),
+(2, 'admin', 'Administrator'),
+(3, 'customer', 'Default Customer'),
+(4, 'utawala', 'Utawala');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_login_attempts`
+--
+
+DROP TABLE IF EXISTS `sma_login_attempts`;
+CREATE TABLE IF NOT EXISTS `sma_login_attempts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `ip_address` varbinary(16) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `login` (`login`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_logs`
+--
+
+DROP TABLE IF EXISTS `sma_logs`;
+CREATE TABLE IF NOT EXISTS `sma_logs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `detail` varchar(190) NOT NULL,
+  `model` longtext,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_migrations`
+--
+
+DROP TABLE IF EXISTS `sma_migrations`;
+CREATE TABLE IF NOT EXISTS `sma_migrations` (
+  `version` bigint NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_migrations`
+--
+
+INSERT INTO `sma_migrations` (`version`) VALUES
+(315);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_notifications`
+--
+
+DROP TABLE IF EXISTS `sma_notifications`;
+CREATE TABLE IF NOT EXISTS `sma_notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `comment` text NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `from_date` datetime DEFAULT NULL,
+  `till_date` datetime DEFAULT NULL,
+  `scope` tinyint(1) NOT NULL DEFAULT '3',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_order_ref`
+--
+
+DROP TABLE IF EXISTS `sma_order_ref`;
+CREATE TABLE IF NOT EXISTS `sma_order_ref` (
+  `ref_id` int NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `so` int NOT NULL DEFAULT '1',
+  `qu` int NOT NULL DEFAULT '1',
+  `po` int NOT NULL DEFAULT '1',
+  `to` int NOT NULL DEFAULT '1',
+  `pos` int NOT NULL DEFAULT '1',
+  `do` int NOT NULL DEFAULT '1',
+  `pay` int NOT NULL DEFAULT '1',
+  `re` int NOT NULL DEFAULT '1',
+  `rep` int NOT NULL DEFAULT '1',
+  `ex` int NOT NULL DEFAULT '1',
+  `ppay` int NOT NULL DEFAULT '1',
+  `qa` int DEFAULT '1',
+  PRIMARY KEY (`ref_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_order_ref`
+--
+
+INSERT INTO `sma_order_ref` (`ref_id`, `date`, `so`, `qu`, `po`, `to`, `pos`, `do`, `pay`, `re`, `rep`, `ex`, `ppay`, `qa`) VALUES
+(1, '2025-08-01', 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_pages`
+--
+
+DROP TABLE IF EXISTS `sma_pages`;
+CREATE TABLE IF NOT EXISTS `sma_pages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(15) NOT NULL,
+  `title` varchar(60) NOT NULL,
+  `description` varchar(180) NOT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `body` text NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `order_no` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_payments`
+--
+
+DROP TABLE IF EXISTS `sma_payments`;
+CREATE TABLE IF NOT EXISTS `sma_payments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sale_id` int DEFAULT NULL,
+  `return_id` int DEFAULT NULL,
+  `purchase_id` int DEFAULT NULL,
+  `reference_no` varchar(50) NOT NULL,
+  `transaction_id` varchar(50) DEFAULT NULL,
+  `paid_by` varchar(20) NOT NULL,
+  `cheque_no` varchar(20) DEFAULT NULL,
+  `cc_no` varchar(20) DEFAULT NULL,
+  `cc_holder` varchar(25) DEFAULT NULL,
+  `cc_month` varchar(2) DEFAULT NULL,
+  `cc_year` varchar(4) DEFAULT NULL,
+  `cc_type` varchar(20) DEFAULT NULL,
+  `amount` decimal(25,4) NOT NULL,
+  `currency` varchar(3) DEFAULT NULL,
+  `created_by` int NOT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `type` varchar(20) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `pos_paid` decimal(25,4) DEFAULT '0.0000',
+  `pos_balance` decimal(25,4) DEFAULT '0.0000',
+  `approval_code` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_payments`
+--
+
+INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`, `approval_code`) VALUES
+(1, '2025-08-18 17:24:00', NULL, NULL, 1, 'POP2025/08/0001', NULL, 'cash', '', '', '', '', '', 'Visa', 2160000.0000, NULL, 1, '0d995d9ee52efe3ead8317f0b4fb8d10.pdf', 'sent', '&lt;p&gt;paid&lt;&sol;p&gt;', 0.0000, 0.0000, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_paypal`
+--
+
+DROP TABLE IF EXISTS `sma_paypal`;
+CREATE TABLE IF NOT EXISTS `sma_paypal` (
+  `id` int NOT NULL,
+  `active` tinyint NOT NULL,
+  `account_email` varchar(255) NOT NULL,
+  `paypal_currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `fixed_charges` decimal(25,4) NOT NULL DEFAULT '2.0000',
+  `extra_charges_my` decimal(25,4) NOT NULL DEFAULT '3.9000',
+  `extra_charges_other` decimal(25,4) NOT NULL DEFAULT '4.4000',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_paypal`
+--
+
+INSERT INTO `sma_paypal` (`id`, `active`, `account_email`, `paypal_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES
+(1, 1, 'mypaypal@paypal.com', 'USD', 0.0000, 0.0000, 0.0000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_permissions`
+--
+
+DROP TABLE IF EXISTS `sma_permissions`;
+CREATE TABLE IF NOT EXISTS `sma_permissions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `products-index` tinyint(1) DEFAULT '0',
+  `products-add` tinyint(1) DEFAULT '0',
+  `products-edit` tinyint(1) DEFAULT '0',
+  `products-delete` tinyint(1) DEFAULT '0',
+  `products-cost` tinyint(1) DEFAULT '0',
+  `products-price` tinyint(1) DEFAULT '0',
+  `quotes-index` tinyint(1) DEFAULT '0',
+  `quotes-add` tinyint(1) DEFAULT '0',
+  `quotes-edit` tinyint(1) DEFAULT '0',
+  `quotes-pdf` tinyint(1) DEFAULT '0',
+  `quotes-email` tinyint(1) DEFAULT '0',
+  `quotes-delete` tinyint(1) DEFAULT '0',
+  `sales-index` tinyint(1) DEFAULT '0',
+  `sales-add` tinyint(1) DEFAULT '0',
+  `sales-edit` tinyint(1) DEFAULT '0',
+  `sales-pdf` tinyint(1) DEFAULT '0',
+  `sales-email` tinyint(1) DEFAULT '0',
+  `sales-delete` tinyint(1) DEFAULT '0',
+  `purchases-index` tinyint(1) DEFAULT '0',
+  `purchases-add` tinyint(1) DEFAULT '0',
+  `purchases-edit` tinyint(1) DEFAULT '0',
+  `purchases-pdf` tinyint(1) DEFAULT '0',
+  `purchases-email` tinyint(1) DEFAULT '0',
+  `purchases-delete` tinyint(1) DEFAULT '0',
+  `transfers-index` tinyint(1) DEFAULT '0',
+  `transfers-add` tinyint(1) DEFAULT '0',
+  `transfers-edit` tinyint(1) DEFAULT '0',
+  `transfers-pdf` tinyint(1) DEFAULT '0',
+  `transfers-email` tinyint(1) DEFAULT '0',
+  `transfers-delete` tinyint(1) DEFAULT '0',
+  `customers-index` tinyint(1) DEFAULT '0',
+  `customers-add` tinyint(1) DEFAULT '0',
+  `customers-edit` tinyint(1) DEFAULT '0',
+  `customers-delete` tinyint(1) DEFAULT '0',
+  `suppliers-index` tinyint(1) DEFAULT '0',
+  `suppliers-add` tinyint(1) DEFAULT '0',
+  `suppliers-edit` tinyint(1) DEFAULT '0',
+  `suppliers-delete` tinyint(1) DEFAULT '0',
+  `sales-deliveries` tinyint(1) DEFAULT '0',
+  `sales-add_delivery` tinyint(1) DEFAULT '0',
+  `sales-edit_delivery` tinyint(1) DEFAULT '0',
+  `sales-delete_delivery` tinyint(1) DEFAULT '0',
+  `sales-email_delivery` tinyint(1) DEFAULT '0',
+  `sales-pdf_delivery` tinyint(1) DEFAULT '0',
+  `sales-gift_cards` tinyint(1) DEFAULT '0',
+  `sales-add_gift_card` tinyint(1) DEFAULT '0',
+  `sales-edit_gift_card` tinyint(1) DEFAULT '0',
+  `sales-delete_gift_card` tinyint(1) DEFAULT '0',
+  `pos-index` tinyint(1) DEFAULT '0',
+  `sales-return_sales` tinyint(1) DEFAULT '0',
+  `reports-index` tinyint(1) DEFAULT '0',
+  `reports-warehouse_stock` tinyint(1) DEFAULT '0',
+  `reports-quantity_alerts` tinyint(1) DEFAULT '0',
+  `reports-expiry_alerts` tinyint(1) DEFAULT '0',
+  `reports-products` tinyint(1) DEFAULT '0',
+  `reports-daily_sales` tinyint(1) DEFAULT '0',
+  `reports-monthly_sales` tinyint(1) DEFAULT '0',
+  `reports-sales` tinyint(1) DEFAULT '0',
+  `reports-payments` tinyint(1) DEFAULT '0',
+  `reports-purchases` tinyint(1) DEFAULT '0',
+  `reports-profit_loss` tinyint(1) DEFAULT '0',
+  `reports-customers` tinyint(1) DEFAULT '0',
+  `reports-suppliers` tinyint(1) DEFAULT '0',
+  `reports-staff` tinyint(1) DEFAULT '0',
+  `reports-register` tinyint(1) DEFAULT '0',
+  `sales-payments` tinyint(1) DEFAULT '0',
+  `purchases-payments` tinyint(1) DEFAULT '0',
+  `purchases-expenses` tinyint(1) DEFAULT '0',
+  `products-adjustments` tinyint(1) NOT NULL DEFAULT '0',
+  `bulk_actions` tinyint(1) NOT NULL DEFAULT '0',
+  `customers-deposits` tinyint(1) NOT NULL DEFAULT '0',
+  `customers-delete_deposit` tinyint(1) NOT NULL DEFAULT '0',
+  `products-barcode` tinyint(1) NOT NULL DEFAULT '0',
+  `purchases-return_purchases` tinyint(1) NOT NULL DEFAULT '0',
+  `reports-expenses` tinyint(1) NOT NULL DEFAULT '0',
+  `reports-daily_purchases` tinyint(1) DEFAULT '0',
+  `reports-monthly_purchases` tinyint(1) DEFAULT '0',
+  `products-stock_count` tinyint(1) DEFAULT '0',
+  `edit_price` tinyint(1) DEFAULT '0',
+  `returns-index` tinyint(1) DEFAULT '0',
+  `returns-add` tinyint(1) DEFAULT '0',
+  `returns-edit` tinyint(1) DEFAULT '0',
+  `returns-delete` tinyint(1) DEFAULT '0',
+  `returns-email` tinyint(1) DEFAULT '0',
+  `returns-pdf` tinyint(1) DEFAULT '0',
+  `reports-tax` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_permissions`
+--
+
+INSERT INTO `sma_permissions` (`id`, `group_id`, `products-index`, `products-add`, `products-edit`, `products-delete`, `products-cost`, `products-price`, `quotes-index`, `quotes-add`, `quotes-edit`, `quotes-pdf`, `quotes-email`, `quotes-delete`, `sales-index`, `sales-add`, `sales-edit`, `sales-pdf`, `sales-email`, `sales-delete`, `purchases-index`, `purchases-add`, `purchases-edit`, `purchases-pdf`, `purchases-email`, `purchases-delete`, `transfers-index`, `transfers-add`, `transfers-edit`, `transfers-pdf`, `transfers-email`, `transfers-delete`, `customers-index`, `customers-add`, `customers-edit`, `customers-delete`, `suppliers-index`, `suppliers-add`, `suppliers-edit`, `suppliers-delete`, `sales-deliveries`, `sales-add_delivery`, `sales-edit_delivery`, `sales-delete_delivery`, `sales-email_delivery`, `sales-pdf_delivery`, `sales-gift_cards`, `sales-add_gift_card`, `sales-edit_gift_card`, `sales-delete_gift_card`, `pos-index`, `sales-return_sales`, `reports-index`, `reports-warehouse_stock`, `reports-quantity_alerts`, `reports-expiry_alerts`, `reports-products`, `reports-daily_sales`, `reports-monthly_sales`, `reports-sales`, `reports-payments`, `reports-purchases`, `reports-profit_loss`, `reports-customers`, `reports-suppliers`, `reports-staff`, `reports-register`, `sales-payments`, `purchases-payments`, `purchases-expenses`, `products-adjustments`, `bulk_actions`, `customers-deposits`, `customers-delete_deposit`, `products-barcode`, `purchases-return_purchases`, `reports-expenses`, `reports-daily_purchases`, `reports-monthly_purchases`, `products-stock_count`, `edit_price`, `returns-index`, `returns-add`, `returns-edit`, `returns-delete`, `returns-email`, `returns-pdf`, `reports-tax`) VALUES
+(1, 5, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_pos_register`
+--
+
+DROP TABLE IF EXISTS `sma_pos_register`;
+CREATE TABLE IF NOT EXISTS `sma_pos_register` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int NOT NULL,
+  `cash_in_hand` decimal(25,4) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `total_cash` decimal(25,4) DEFAULT NULL,
+  `total_cheques` int DEFAULT NULL,
+  `total_cc_slips` int DEFAULT NULL,
+  `total_cash_submitted` decimal(25,4) DEFAULT NULL,
+  `total_cheques_submitted` int DEFAULT NULL,
+  `total_cc_slips_submitted` int DEFAULT NULL,
+  `note` text,
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `transfer_opened_bills` varchar(50) DEFAULT NULL,
+  `closed_by` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_pos_register`
+--
+
+INSERT INTO `sma_pos_register` (`id`, `date`, `user_id`, `cash_in_hand`, `status`, `total_cash`, `total_cheques`, `total_cc_slips`, `total_cash_submitted`, `total_cheques_submitted`, `total_cc_slips_submitted`, `note`, `closed_at`, `transfer_opened_bills`, `closed_by`) VALUES
+(1, '2025-08-13 18:24:43', 1, 4000.0000, 'open', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_pos_settings`
+--
+
+DROP TABLE IF EXISTS `sma_pos_settings`;
+CREATE TABLE IF NOT EXISTS `sma_pos_settings` (
+  `pos_id` int NOT NULL,
+  `cat_limit` int NOT NULL,
+  `pro_limit` int NOT NULL,
+  `default_category` int NOT NULL,
+  `default_customer` int NOT NULL,
+  `default_biller` int NOT NULL,
+  `display_time` varchar(3) NOT NULL DEFAULT 'yes',
+  `cf_title1` varchar(255) DEFAULT NULL,
+  `cf_title2` varchar(255) DEFAULT NULL,
+  `cf_value1` varchar(255) DEFAULT NULL,
+  `cf_value2` varchar(255) DEFAULT NULL,
+  `receipt_printer` varchar(55) DEFAULT NULL,
+  `cash_drawer_codes` varchar(55) DEFAULT NULL,
+  `focus_add_item` varchar(55) DEFAULT NULL,
+  `add_manual_product` varchar(55) DEFAULT NULL,
+  `customer_selection` varchar(55) DEFAULT NULL,
+  `add_customer` varchar(55) DEFAULT NULL,
+  `toggle_category_slider` varchar(55) DEFAULT NULL,
+  `toggle_subcategory_slider` varchar(55) DEFAULT NULL,
+  `cancel_sale` varchar(55) DEFAULT NULL,
+  `suspend_sale` varchar(55) DEFAULT NULL,
+  `print_items_list` varchar(55) DEFAULT NULL,
+  `finalize_sale` varchar(55) DEFAULT NULL,
+  `today_sale` varchar(55) DEFAULT NULL,
+  `open_hold_bills` varchar(55) DEFAULT NULL,
+  `close_register` varchar(55) DEFAULT NULL,
+  `keyboard` tinyint(1) NOT NULL,
+  `pos_printers` varchar(255) DEFAULT NULL,
+  `java_applet` tinyint(1) NOT NULL,
+  `product_button_color` varchar(20) NOT NULL DEFAULT 'default',
+  `tooltips` tinyint(1) DEFAULT '1',
+  `paypal_pro` tinyint(1) DEFAULT '0',
+  `stripe` tinyint(1) DEFAULT '0',
+  `rounding` tinyint(1) DEFAULT '0',
+  `char_per_line` tinyint DEFAULT '42',
+  `pin_code` varchar(20) DEFAULT NULL,
+  `purchase_code` varchar(100) DEFAULT 'purchase_code',
+  `envato_username` varchar(50) DEFAULT 'envato_username',
+  `version` varchar(10) DEFAULT '3.4.53',
+  `after_sale_page` tinyint(1) DEFAULT '0',
+  `item_order` tinyint(1) DEFAULT '0',
+  `authorize` tinyint(1) DEFAULT '0',
+  `toggle_brands_slider` varchar(55) DEFAULT NULL,
+  `remote_printing` tinyint(1) DEFAULT '1',
+  `printer` int DEFAULT NULL,
+  `order_printers` varchar(55) DEFAULT NULL,
+  `auto_print` tinyint(1) DEFAULT '0',
+  `customer_details` tinyint(1) DEFAULT NULL,
+  `local_printers` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`pos_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_pos_settings`
+--
+
+INSERT INTO `sma_pos_settings` (`pos_id`, `cat_limit`, `pro_limit`, `default_category`, `default_customer`, `default_biller`, `display_time`, `cf_title1`, `cf_title2`, `cf_value1`, `cf_value2`, `receipt_printer`, `cash_drawer_codes`, `focus_add_item`, `add_manual_product`, `customer_selection`, `add_customer`, `toggle_category_slider`, `toggle_subcategory_slider`, `cancel_sale`, `suspend_sale`, `print_items_list`, `finalize_sale`, `today_sale`, `open_hold_bills`, `close_register`, `keyboard`, `pos_printers`, `java_applet`, `product_button_color`, `tooltips`, `paypal_pro`, `stripe`, `rounding`, `char_per_line`, `pin_code`, `purchase_code`, `envato_username`, `version`, `after_sale_page`, `item_order`, `authorize`, `toggle_brands_slider`, `remote_printing`, `printer`, `order_printers`, `auto_print`, `customer_details`, `local_printers`) VALUES
+(1, 22, 20, 1, 1, 3, '1', 'GST Reg', 'VAT Reg', '123456789', '987654321', 'BIXOLON SRP-350II', 'x1C', 'Ctrl+F3', 'Ctrl+Shift+M', 'Ctrl+Shift+C', 'Ctrl+Shift+A', 'Ctrl+F11', 'Ctrl+F12', 'F4', 'F7', 'F9', 'F8', 'Ctrl+F1', 'Ctrl+F2', 'Ctrl+F10', 1, 'BIXOLON SRP-350II, BIXOLON SRP-350II', 0, 'default', 1, 0, 0, 0, 42, NULL, 'purchase_code', 'envato_username', '3.4.53', 0, 0, 0, NULL, 1, NULL, NULL, 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_price_groups`
+--
+
+DROP TABLE IF EXISTS `sma_price_groups`;
+CREATE TABLE IF NOT EXISTS `sma_price_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_price_groups`
+--
+
+INSERT INTO `sma_price_groups` (`id`, `name`) VALUES
+(1, 'Default');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_printers`
+--
+
+DROP TABLE IF EXISTS `sma_printers`;
+CREATE TABLE IF NOT EXISTS `sma_printers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) NOT NULL,
+  `type` varchar(25) NOT NULL,
+  `profile` varchar(25) NOT NULL,
+  `char_per_line` tinyint UNSIGNED DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `ip_address` varbinary(45) DEFAULT NULL,
+  `port` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_products`
+--
+
+DROP TABLE IF EXISTS `sma_products`;
+CREATE TABLE IF NOT EXISTS `sma_products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `unit` int DEFAULT NULL,
+  `cost` decimal(25,4) DEFAULT NULL,
+  `price` decimal(25,4) NOT NULL,
+  `alert_quantity` decimal(15,4) DEFAULT '20.0000',
+  `image` varchar(255) DEFAULT 'no_image.png',
+  `category_id` int NOT NULL,
+  `subcategory_id` int DEFAULT NULL,
+  `cf1` varchar(255) DEFAULT NULL,
+  `cf2` varchar(255) DEFAULT NULL,
+  `cf3` varchar(255) DEFAULT NULL,
+  `cf4` varchar(255) DEFAULT NULL,
+  `cf5` varchar(255) DEFAULT NULL,
+  `cf6` varchar(255) DEFAULT NULL,
+  `quantity` decimal(15,4) DEFAULT '0.0000',
+  `tax_rate` int DEFAULT NULL,
+  `track_quantity` tinyint(1) DEFAULT '1',
+  `details` varchar(1000) DEFAULT NULL,
+  `warehouse` int DEFAULT NULL,
+  `barcode_symbology` varchar(55) NOT NULL DEFAULT 'code128',
+  `file` varchar(100) DEFAULT NULL,
+  `product_details` text,
+  `tax_method` tinyint(1) DEFAULT '0',
+  `type` varchar(55) NOT NULL DEFAULT 'standard',
+  `supplier1` int DEFAULT NULL,
+  `supplier1price` decimal(25,4) DEFAULT NULL,
+  `supplier2` int DEFAULT NULL,
+  `supplier2price` decimal(25,4) DEFAULT NULL,
+  `supplier3` int DEFAULT NULL,
+  `supplier3price` decimal(25,4) DEFAULT NULL,
+  `supplier4` int DEFAULT NULL,
+  `supplier4price` decimal(25,4) DEFAULT NULL,
+  `supplier5` int DEFAULT NULL,
+  `supplier5price` decimal(25,4) DEFAULT NULL,
+  `promotion` tinyint(1) DEFAULT '0',
+  `promo_price` decimal(25,4) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `supplier1_part_no` varchar(50) DEFAULT NULL,
+  `supplier2_part_no` varchar(50) DEFAULT NULL,
+  `supplier3_part_no` varchar(50) DEFAULT NULL,
+  `supplier4_part_no` varchar(50) DEFAULT NULL,
+  `supplier5_part_no` varchar(50) DEFAULT NULL,
+  `sale_unit` int DEFAULT NULL,
+  `purchase_unit` int DEFAULT NULL,
+  `brand` int DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `featured` tinyint(1) DEFAULT NULL,
+  `weight` decimal(10,4) DEFAULT NULL,
+  `hsn_code` int DEFAULT NULL,
+  `views` int NOT NULL DEFAULT '0',
+  `hide` tinyint(1) NOT NULL DEFAULT '0',
+  `second_name` varchar(255) DEFAULT NULL,
+  `hide_pos` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `category_id` (`category_id`),
+  KEY `id` (`id`),
+  KEY `id_2` (`id`),
+  KEY `category_id_2` (`category_id`),
+  KEY `unit` (`unit`),
+  KEY `brand` (`brand`)
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_products`
+--
+
+INSERT INTO `sma_products` (`id`, `code`, `name`, `unit`, `cost`, `price`, `alert_quantity`, `image`, `category_id`, `subcategory_id`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `quantity`, `tax_rate`, `track_quantity`, `details`, `warehouse`, `barcode_symbology`, `file`, `product_details`, `tax_method`, `type`, `supplier1`, `supplier1price`, `supplier2`, `supplier2price`, `supplier3`, `supplier3price`, `supplier4`, `supplier4price`, `supplier5`, `supplier5price`, `promotion`, `promo_price`, `start_date`, `end_date`, `supplier1_part_no`, `supplier2_part_no`, `supplier3_part_no`, `supplier4_part_no`, `supplier5_part_no`, `sale_unit`, `purchase_unit`, `brand`, `slug`, `featured`, `weight`, `hsn_code`, `views`, `hide`, `second_name`, `hide_pos`) VALUES
+(1, 'P001', 'FarmFresh Broiler Chicken 1Kg', 1, 12000.0000, 15000.0000, 50.0000, 'assets/uploads/farmfresh_broiler_chicken_1kg.png', 14, 18, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'High-quality broiler chicken from FarmFresh, perfect for grilling', 1, 'code128', NULL, NULL, 0, 'standard', 4, 12000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP001', NULL, NULL, NULL, NULL, 1, 1, 1, 'farmfresh-broiler-chicken-1kg', NULL, NULL, 0, 0, 0, 'Broiler 1Kg', 0),
+(2, 'P002', 'CluckKing Layer Chicken 1.5Kg', 1, 14400.0000, 18000.0000, 50.0000, 'assets/uploads/cluckking_layer_chicken_1.5kg.png', 14, 19, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Fresh layer chicken from CluckKing, ideal for roasting', 1, 'code128', NULL, NULL, 0, 'standard', 4, 14400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP002', NULL, NULL, NULL, NULL, 1, 1, 2, 'cluckking-layer-chicken-1.5kg', NULL, NULL, 0, 0, 0, 'Layer 1.5Kg', 0),
+(3, 'P003', 'OrganicNest Organic Eggs 12-Pack', 5, 8000.0000, 10000.0000, 50.0000, 'assets/uploads/organicnest_organic_eggs_12-pack.png', 14, 20, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Organic eggs from OrganicNest, free-range and nutrient-rich', 1, 'code128', NULL, NULL, 0, 'standard', 4, 8000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP003', NULL, NULL, NULL, NULL, 5, 5, 3, 'organicnest-organic-eggs-12-pack', NULL, NULL, 0, 0, 0, 'Eggs 12-Pack', 0),
+(4, 'P004', 'FarmFresh Chicken Wings 500g', 1, 6400.0000, 8000.0000, 50.0000, 'assets/uploads/farmfresh_chicken_wings_500g.png', 14, 18, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Juicy chicken wings from FarmFresh, great for snacks', 1, 'code128', NULL, NULL, 0, 'standard', 4, 6400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP004', NULL, NULL, NULL, NULL, 1, 1, 1, 'farmfresh-chicken-wings-500g', NULL, NULL, 0, 0, 0, 'Wings 500g', 0),
+(5, 'P005', 'CluckKing Chicken Thighs 1Kg', 1, 12800.0000, 16000.0000, 50.0000, 'assets/uploads/cluckking_chicken_thighs_1kg.png', 14, 18, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Tender chicken thighs from CluckKing for hearty meals', 1, 'code128', NULL, NULL, 0, 'standard', 4, 12800.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP005', NULL, NULL, NULL, NULL, 1, 1, 2, 'cluckking-chicken-thighs-1kg', NULL, NULL, 0, 0, 0, 'Thighs 1Kg', 0),
+(6, 'P006', 'OrganicNest Manure Pack 5Kg', 1, 4000.0000, 5000.0000, 50.0000, 'assets/uploads/organicnest_manure_pack_5kg.png', 14, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Organic manure from OrganicNest for farming', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP006', NULL, NULL, NULL, NULL, 1, 1, 3, 'organicnest-manure-pack-5kg', NULL, NULL, 0, 0, 0, 'Manure 5Kg', 0),
+(7, 'P007', 'FarmFresh Pig Meat 2Kg', 1, 20000.0000, 25000.0000, 50.0000, 'assets/uploads/farmfresh_pig_meat_2kg.png', 32, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Premium pig meat from FarmFresh, perfect for stews', 1, 'code128', NULL, NULL, 0, 'standard', 4, 20000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP007', NULL, NULL, NULL, NULL, 1, 1, 1, 'farmfresh-pig-meat-2kg', NULL, NULL, 0, 0, 0, 'Pig Meat 2Kg', 0),
+(8, 'P008', 'CluckKing Piglets Each', 3, 40000.0000, 50000.0000, 50.0000, 'assets/uploads/cluckking_piglets_each.png', 32, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Healthy piglets from CluckKing for breeding', 1, 'code128', NULL, NULL, 0, 'standard', 4, 40000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP008', NULL, NULL, NULL, NULL, 3, 3, 2, 'cluckking-piglets-each', NULL, NULL, 0, 0, 0, 'Piglet', 0),
+(9, 'P009', 'OrganicNest Chicken Breast 1Kg', 1, 13600.0000, 17000.0000, 50.0000, 'assets/uploads/organicnest_chicken_breast_1kg.png', 14, 18, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Lean chicken breast from OrganicNest for healthy meals', 1, 'code128', NULL, NULL, 0, 'standard', 4, 13600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP009', NULL, NULL, NULL, NULL, 1, 1, 3, 'organicnest-chicken-breast-1kg', NULL, NULL, 0, 0, 0, 'Breast 1Kg', 0),
+(10, 'P010', 'FarmFresh Egg Tray 30-Pack', 5, 16000.0000, 20000.0000, 50.0000, 'assets/uploads/farmfresh_egg_tray_30-pack.png', 14, 20, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Fresh eggs in a 30-pack tray from FarmFresh', 1, 'code128', NULL, NULL, 0, 'standard', 4, 16000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP010', NULL, NULL, NULL, NULL, 5, 5, 1, 'farmfresh-egg-tray-30-pack', NULL, NULL, 0, 0, 0, 'Eggs 30-Pack', 0),
+(11, 'P011', 'CluckKing Chicken Drumsticks 1Kg', 1, 11200.0000, 14000.0000, 50.0000, 'assets/uploads/cluckking_chicken_drumsticks_1kg.png', 14, 18, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Flavorful drumsticks from CluckKing for barbecues', 1, 'code128', NULL, NULL, 0, 'standard', 4, 11200.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP011', NULL, NULL, NULL, NULL, 1, 1, 2, 'cluckking-chicken-drumsticks-1kg', NULL, NULL, 0, 0, 0, 'Drumsticks 1Kg', 0),
+(12, 'P012', 'OrganicNest Pig Meat 1Kg', 1, 17600.0000, 22000.0000, 50.0000, 'assets/uploads/organicnest_pig_meat_1kg.png', 32, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Organic pig meat from OrganicNest, ethically sourced', 1, 'code128', NULL, NULL, 0, 'standard', 4, 17600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP012', NULL, NULL, NULL, NULL, 1, 1, 3, 'organicnest-pig-meat-1kg', NULL, NULL, 0, 0, 0, 'Pig Meat 1Kg', 0),
+(13, 'I001', 'SunGold Sunflower Oil 20L', 2, 72000.0000, 90000.0000, 50.0000, 'assets/uploads/sungold_sunflower_oil_20l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Pure sunflower oil from SunGold, ideal for bulk cooking', 1, 'code128', NULL, NULL, 0, 'standard', 4, 72000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP013', NULL, NULL, NULL, NULL, 2, 2, 4, 'sungold-sunflower-oil-20l', NULL, NULL, 0, 0, 0, 'Sunflower Oil 20L', 0),
+(14, 'I002', 'AgroPure Sunflower Oil 5L', 2, 20000.0000, 25000.0000, 50.0000, 'assets/uploads/agropure_sunflower_oil_5l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'High-quality sunflower oil from AgroPure for daily use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 20000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP014', NULL, NULL, NULL, NULL, 2, 2, 5, 'agropure-sunflower-oil-5l', NULL, NULL, 0, 0, 0, 'Sunflower Oil 5L', 0),
+(15, 'I003', 'OilMasters Sunflower Cake 10Kg', 1, 24000.0000, 30000.0000, 50.0000, 'assets/uploads/oilmasters_sunflower_cake_10kg.png', 15, 22, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Nutritious sunflower cake from OilMasters for animal feed', 1, 'code128', NULL, NULL, 0, 'standard', 4, 24000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP015', NULL, NULL, NULL, NULL, 1, 1, 6, 'oilmasters-sunflower-cake-10kg', NULL, NULL, 0, 0, 0, 'Sunflower Cake 10Kg', 0),
+(16, 'I004', 'SunGold Soybean Oil 5L', 2, 22400.0000, 28000.0000, 50.0000, 'assets/uploads/sungold_soybean_oil_5l.png', 15, 23, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Premium soybean oil from SunGold for cooking', 1, 'code128', NULL, NULL, 0, 'standard', 4, 22400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP016', NULL, NULL, NULL, NULL, 2, 2, 4, 'sungold-soybean-oil-5l', NULL, NULL, 0, 0, 0, 'Soybean Oil 5L', 0),
+(17, 'I005', 'AgroPure Sesame Oil 1L', 2, 12000.0000, 15000.0000, 50.0000, 'assets/uploads/agropure_sesame_oil_1l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Pure sesame oil from AgroPure, great for flavoring', 1, 'code128', NULL, NULL, 0, 'standard', 4, 12000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP017', NULL, NULL, NULL, NULL, 2, 2, 5, 'agropure-sesame-oil-1l', NULL, NULL, 0, 0, 0, 'Sesame Oil 1L', 0),
+(18, 'I006', 'OilMasters Groundnut Oil 5L', 2, 24000.0000, 30000.0000, 50.0000, 'assets/uploads/oilmasters_groundnut_oil_5l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Rich groundnut oil from OilMasters for frying', 1, 'code128', NULL, NULL, 0, 'standard', 4, 24000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP018', NULL, NULL, NULL, NULL, 2, 2, 6, 'oilmasters-groundnut-oil-5l', NULL, NULL, 0, 0, 0, 'Groundnut Oil 5L', 0),
+(19, 'I007', 'SunGold Sunflower Oil 1L', 2, 4800.0000, 6000.0000, 50.0000, 'assets/uploads/sungold_sunflower_oil_1l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Convenient 1L sunflower oil from SunGold for home use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4800.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP019', NULL, NULL, NULL, NULL, 2, 2, 4, 'sungold-sunflower-oil-1l', NULL, NULL, 0, 0, 0, 'Sunflower Oil 1L', 0),
+(20, 'I008', 'AgroPure Sunflower Cake 5Kg', 1, 12000.0000, 15000.0000, 50.0000, 'assets/uploads/agropure_sunflower_cake_5kg.png', 15, 22, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Sunflower cake from AgroPure for livestock feed', 1, 'code128', NULL, NULL, 0, 'standard', 4, 12000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP020', NULL, NULL, NULL, NULL, 1, 1, 5, 'agropure-sunflower-cake-5kg', NULL, NULL, 0, 0, 0, 'Sunflower Cake 5Kg', 0),
+(21, 'I009', 'OilMasters Sesame Oil 500mL', 2, 6400.0000, 8000.0000, 50.0000, 'assets/uploads/oilmasters_sesame_oil_500ml.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Premium sesame oil from OilMasters for culinary use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 6400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP021', NULL, NULL, NULL, NULL, 2, 2, 6, 'oilmasters-sesame-oil-500ml', NULL, NULL, 0, 0, 0, 'Sesame Oil 500mL', 0),
+(22, 'I010', 'SunGold Soybean Oil 20L', 2, 76000.0000, 95000.0000, 50.0000, 'assets/uploads/sungold_soybean_oil_20l.png', 15, 23, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Bulk soybean oil from SunGold for industrial use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 76000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP022', NULL, NULL, NULL, NULL, 2, 2, 4, 'sungold-soybean-oil-20l', NULL, NULL, 0, 0, 0, 'Soybean Oil 20L', 0),
+(23, 'I011', 'AgroPure Refined Sunflower Oil 5L', 2, 21600.0000, 27000.0000, 50.0000, 'assets/uploads/agropure_refined_sunflower_oil_5l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Purely refined sunflower oil from AgroPure', 1, 'code128', NULL, NULL, 0, 'standard', 4, 21600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP023', NULL, NULL, NULL, NULL, 2, 2, 5, 'agropure-refined-sunflower-oil-5l', NULL, NULL, 0, 0, 0, 'Refined Oil 5L', 0),
+(24, 'I012', 'OilMasters Groundnut Oil 1L', 2, 5600.0000, 7000.0000, 50.0000, 'assets/uploads/oilmasters_groundnut_oil_1l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Groundnut oil from OilMasters for small-scale cooking', 1, 'code128', NULL, NULL, 0, 'standard', 4, 5600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP024', NULL, NULL, NULL, NULL, 2, 2, 6, 'oilmasters-groundnut-oil-1l', NULL, NULL, 0, 0, 0, 'Groundnut Oil 1L', 0),
+(25, 'I013', 'SunGold Sesame Oil 2L', 2, 16000.0000, 20000.0000, 50.0000, 'assets/uploads/sungold_sesame_oil_2l.png', 15, 21, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Sesame oil from SunGold for enhanced flavor', 1, 'code128', NULL, NULL, 0, 'standard', 4, 16000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP025', NULL, NULL, NULL, NULL, 2, 2, 4, 'sungold-sesame-oil-2l', NULL, NULL, 0, 0, 0, 'Sesame Oil 2L', 0),
+(26, 'D001', 'HomeEase Rice 5Kg', 1, 9600.0000, 12000.0000, 35.0000, 'assets/uploads/homeease_rice_5kg.png', 16, 24, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Premium rice from HomeEase for daily meals', 1, 'code128', NULL, NULL, 0, 'standard', 4, 9600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP026', NULL, NULL, NULL, NULL, 1, 1, 7, 'homeease-rice-5kg', NULL, NULL, 0, 0, 0, 'Rice 5Kg', 0),
+(27, 'D002', 'DailyMart Sugar 2Kg', 1, 4800.0000, 6000.0000, 35.0000, 'assets/uploads/dailymart_sugar_2kg.png', 16, 25, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Refined sugar from DailyMart for sweetening', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4800.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP027', NULL, NULL, NULL, NULL, 1, 1, 8, 'dailymart-sugar-2kg', NULL, NULL, 0, 0, 0, 'Sugar 2Kg', 0),
+(28, 'D003', 'KitchenJoy Cooking Salt 1Kg', 1, 2400.0000, 3000.0000, 35.0000, 'assets/uploads/kitchenjoy_cooking_salt_1kg.png', 16, 26, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Pure cooking salt from KitchenJoy for seasoning', 1, 'code128', NULL, NULL, 0, 'standard', 4, 2400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP028', NULL, NULL, NULL, NULL, 1, 1, 9, 'kitchenjoy-cooking-salt-1kg', NULL, NULL, 0, 0, 0, 'Salt 1Kg', 0),
+(29, 'D004', 'HomeEase Soap Bar 200g', 3, 1600.0000, 2000.0000, 35.0000, 'assets/uploads/homeease_soap_bar_200g.png', 16, 27, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Gentle soap bar from HomeEase for daily use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 1600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP029', NULL, NULL, NULL, NULL, 3, 3, 7, 'homeease-soap-bar-200g', NULL, NULL, 0, 0, 0, 'Soap 200g', 0),
+(30, 'D005', 'DailyMart Maize Flour 2Kg', 1, 4000.0000, 5000.0000, 35.0000, 'assets/uploads/dailymart_maize_flour_2kg.png', 16, 24, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'High-quality maize flour from DailyMart for ugali', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP030', NULL, NULL, NULL, NULL, 1, 1, 8, 'dailymart-maize-flour-2kg', NULL, NULL, 0, 0, 0, 'Maize Flour 2Kg', 0),
+(31, 'D006', 'KitchenJoy Milk 1L', 2, 3200.0000, 4000.0000, 35.0000, 'assets/uploads/kitchenjoy_milk_1l.png', 16, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Fresh milk from KitchenJoy, pasteurized and rich', 1, 'code128', NULL, NULL, 0, 'standard', 4, 3200.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP031', NULL, NULL, NULL, NULL, 2, 2, 9, 'kitchenjoy-milk-1l', NULL, NULL, 0, 0, 0, 'Milk 1L', 0),
+(32, 'D007', 'HomeEase Cheese 500g', 1, 8000.0000, 10000.0000, 35.0000, 'assets/uploads/homeease_cheese_500g.png', 16, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Creamy cheese from HomeEase for sandwiches', 1, 'code128', NULL, NULL, 0, 'standard', 4, 8000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP032', NULL, NULL, NULL, NULL, 1, 1, 7, 'homeease-cheese-500g', NULL, NULL, 0, 0, 0, 'Cheese 500g', 0),
+(33, 'D008', 'DailyMart Rice 10Kg', 1, 17600.0000, 22000.0000, 35.0000, 'assets/uploads/dailymart_rice_10kg.png', 16, 24, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Bulk rice from DailyMart for large families', 1, 'code128', NULL, NULL, 0, 'standard', 4, 17600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP033', NULL, NULL, NULL, NULL, 1, 1, 8, 'dailymart-rice-10kg', NULL, NULL, 0, 0, 0, 'Rice 10Kg', 0),
+(34, 'D009', 'KitchenJoy Sugar 5Kg', 1, 11200.0000, 14000.0000, 35.0000, 'assets/uploads/kitchenjoy_sugar_5kg.png', 16, 25, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Granulated sugar from KitchenJoy for baking', 1, 'code128', NULL, NULL, 0, 'standard', 4, 11200.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP034', NULL, NULL, NULL, NULL, 1, 1, 9, 'kitchenjoy-sugar-5kg', NULL, NULL, 0, 0, 0, 'Sugar 5Kg', 0),
+(35, 'D010', 'HomeEase Maize Flour 5Kg', 1, 8800.0000, 11000.0000, 35.0000, 'assets/uploads/homeease_maize_flour_5kg.png', 16, 24, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Maize flour from HomeEase for traditional dishes', 1, 'code128', NULL, NULL, 0, 'standard', 4, 8800.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP035', NULL, NULL, NULL, NULL, 1, 1, 7, 'homeease-maize-flour-5kg', NULL, NULL, 0, 0, 0, 'Maize Flour 5Kg', 0),
+(36, 'D011', 'DailyMart Soap Pack 4-Piece', 5, 5600.0000, 7000.0000, 35.0000, 'assets/uploads/dailymart_soap_pack_4-piece.png', 16, 27, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Soap pack from DailyMart for household use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 5600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP036', NULL, NULL, NULL, NULL, 5, 5, 8, 'dailymart-soap-pack-4-piece', NULL, NULL, 0, 0, 0, 'Soap 4-Pack', 0),
+(37, 'D012', 'KitchenJoy Yogurt 500mL', 2, 4000.0000, 5000.0000, 35.0000, 'assets/uploads/kitchenjoy_yogurt_500ml.png', 16, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Natural yogurt from KitchenJoy, probiotic-rich', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP037', NULL, NULL, NULL, NULL, 2, 2, 9, 'kitchenjoy-yogurt-500ml', NULL, NULL, 0, 0, 0, 'Yogurt 500mL', 0),
+(38, 'A001', 'AgroHarvest Cashew Nuts 1Kg', 1, 16000.0000, 20000.0000, 35.0000, 'd95dde663b8e53acb35650508db757b9.jpg', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>Premium cashew nuts from AgroHarvest, roasted</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 16000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP038', NULL, NULL, NULL, NULL, 1, 1, 10, 'agroharvest-cashew-nuts-1kg', 1, 0.0000, NULL, 4, 0, 'Cashew 1Kg', 0),
+(39, 'A002', 'GreenField Groundnuts 2Kg', 1, 8000.0000, 10000.0000, 35.0000, 'af0f3e4c943418e6dbbd56693362e6f4.png', 17, 29, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>Fresh groundnuts from GreenField, raw or roasted</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 8000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP039', NULL, NULL, NULL, NULL, 1, 1, 11, 'greenfield-groundnuts-2kg', NULL, 0.0000, NULL, 0, 0, 'Groundnuts 2Kg', 0),
+(40, 'A003', 'CropKing Maize 10Kg', 1, 12000.0000, 15000.0000, 35.0000, '82a515e1bbed18056a06bc480a219ccf.jpg', 17, 30, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>High-yield maize from CropKing for milling</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 12000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP040', NULL, NULL, NULL, NULL, 1, 1, 12, 'cropking-maize-10kg', NULL, 0.0000, NULL, 0, 0, 'Maize 10Kg', 0),
+(41, 'A004', 'AgroHarvest Wheat 5Kg', 1, 9600.0000, 12000.0000, 35.0000, '31d13567aa968f07a6d5fc523f177667.png', 17, 31, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>Quality wheat from AgroHarvest for baking</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 9600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP041', NULL, NULL, NULL, NULL, 1, 1, 10, 'agroharvest-wheat-5kg', NULL, 0.0000, NULL, 0, 0, 'Wheat 5Kg', 0),
+(42, 'A005', 'GreenField Agricultural Seeds 1Kg', 1, 6400.0000, 8000.0000, 35.0000, '85ecdade8fd684636bb19b242a9bd1b1.jpg', 17, NULL, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>Certified agricultural seeds from GreenField</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 6400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP042', NULL, NULL, NULL, NULL, 1, 1, 11, 'greenfield-agricultural-seeds-1kg', NULL, 0.0000, NULL, 0, 0, 'Seeds 1Kg', 0),
+(43, 'A006', 'CropKing Raw Cashew 5Kg', 1, 20000.0000, 25000.0000, 35.0000, 'assets/uploads/cropking_raw_cashew_5kg.png', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Raw cashew nuts from CropKing for processing', 1, 'code128', NULL, NULL, 0, 'standard', 4, 20000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP043', NULL, NULL, NULL, NULL, 1, 1, 12, 'cropking-raw-cashew-5kg', NULL, NULL, 0, 0, 0, 'Raw Cashew 5Kg', 0),
+(44, 'A007', 'AgroHarvest Sesame Seeds 1Kg', 1, 7200.0000, 9000.0000, 35.0000, 'c5ec963713c0b1c0c97746d421b3bd7e.jpg', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 300.0000, 0, 1, '<p>Pure sesame seeds from AgroHarvest for oil or snacks</p>', 1, 'code128', NULL, '', 0, 'standard', 4, 7200.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP044', NULL, NULL, NULL, NULL, 1, 1, 10, 'agroharvest-sesame-seeds-1kg', NULL, 0.0000, NULL, 0, 0, 'Sesame 1Kg', 0),
+(45, 'A008', 'GreenField Peas 2Kg', 1, 5600.0000, 7000.0000, 35.0000, 'db1583f04ef1487ab8f7b4bd71a1b989.jpg', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 0.0000, 0, 1, '<p>Fresh peas from GreenField for cooking</p>', 1, 'ean8', NULL, '', 0, 'standard', 4, 5600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'SP045', NULL, NULL, NULL, NULL, 1, 1, 11, 'greenfield-peas-2kg', 1, 5.0000, NULL, 2, 0, 'Peas 2Kg', 0),
+(46, 'A009', 'CropKing Cashew Nuts 500g', 1, 8800.0000, 11000.0000, 35.0000, 'assets/uploads/cropking_cashew_nuts_500g.png', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Roasted cashew nuts from CropKing, snack-ready', 1, 'code128', NULL, NULL, 0, 'standard', 4, 8800.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP046', NULL, NULL, NULL, NULL, 1, 1, 12, 'cropking-cashew-nuts-500g', NULL, NULL, 0, 0, 0, 'Cashew 500g', 0),
+(47, 'A010', 'AgroHarvest Groundnuts 5Kg', 1, 17600.0000, 22000.0000, 35.0000, 'assets/uploads/agroharvest_groundnuts_5kg.png', 17, 29, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Bulk groundnuts from AgroHarvest for roasting', 1, 'code128', NULL, NULL, 0, 'standard', 4, 17600.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP047', NULL, NULL, NULL, NULL, 1, 1, 10, 'agroharvest-groundnuts-5kg', NULL, NULL, 0, 0, 0, 'Groundnuts 5Kg', 0),
+(48, 'A011', 'GreenField Maize 5Kg', 1, 6400.0000, 8000.0000, 35.0000, 'assets/uploads/greenfield_maize_5kg.png', 17, 30, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Maize grains from GreenField for milling', 1, 'code128', NULL, NULL, 0, 'standard', 4, 6400.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP048', NULL, NULL, NULL, NULL, 1, 1, 11, 'greenfield-maize-5kg', NULL, NULL, 0, 0, 0, 'Maize 5Kg', 0),
+(49, 'A012', 'CropKing Sesame Seeds 500g', 1, 4000.0000, 5000.0000, 35.0000, 'assets/uploads/cropking_sesame_seeds_500g.png', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Sesame seeds from CropKing for culinary use', 1, 'code128', NULL, NULL, 0, 'standard', 4, 4000.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP049', NULL, NULL, NULL, NULL, 1, 1, 12, 'cropking-sesame-seeds-500g', NULL, NULL, 0, 0, 0, 'Sesame 500g', 0),
+(50, 'A013', 'AgroHarvest Peas 1Kg', 1, 3200.0000, 4000.0000, 35.0000, 'assets/uploads/agroharvest_peas_1kg.png', 17, 28, 'CF1', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 100.0000, NULL, 1, 'Green peas from AgroHarvest for soups and stews', 1, 'code128', NULL, NULL, 0, 'standard', 4, 3200.0000, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 'SP050', NULL, NULL, NULL, NULL, 1, 1, 10, 'agroharvest-peas-1kg', NULL, NULL, 0, 0, 0, 'Peas 1Kg', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_product_photos`
+--
+
+DROP TABLE IF EXISTS `sma_product_photos`;
+CREATE TABLE IF NOT EXISTS `sma_product_photos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `photo` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_product_photos`
+--
+
+INSERT INTO `sma_product_photos` (`id`, `product_id`, `photo`) VALUES
+(1, 44, '174bea897cfa291808e58da28ac0504d.jpg'),
+(2, 45, '7d067b5e721058c48dde3132b2957aee.jpg'),
+(3, 38, '3037603870433b821c2cefdea4009c36.png'),
+(4, 39, '704f92e4becf4a960d8e0cbcce14080a.png'),
+(5, 40, '9b877205297c5c1f6738860203b18aab.png'),
+(6, 41, 'f1abe5471f6ca20d0d041697693aa3af.jpg'),
+(7, 42, 'f7f3c6c1518ec737ddf92d79943f88d8.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_product_prices`
+--
+
+DROP TABLE IF EXISTS `sma_product_prices`;
+CREATE TABLE IF NOT EXISTS `sma_product_prices` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `price_group_id` int NOT NULL,
+  `price` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `price_group_id` (`price_group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_product_variants`
+--
+
+DROP TABLE IF EXISTS `sma_product_variants`;
+CREATE TABLE IF NOT EXISTS `sma_product_variants` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `cost` decimal(25,4) DEFAULT NULL,
+  `price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_product_id_name` (`product_id`,`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_product_variants`
+--
+
+INSERT INTO `sma_product_variants` (`id`, `product_id`, `name`, `cost`, `price`, `quantity`) VALUES
+(1, 1, 'Whole', 12000.0000, 15000.0000, 50.0000),
+(2, 1, 'Cut', 12000.0000, 15000.0000, 50.0000),
+(3, 2, 'Whole', 14400.0000, 18000.0000, 50.0000),
+(4, 2, 'Cut', 14400.0000, 18000.0000, 50.0000),
+(5, 3, 'White', 8000.0000, 10000.0000, 50.0000),
+(6, 3, 'Brown', 8000.0000, 10000.0000, 50.0000),
+(7, 4, 'Spicy', 6400.0000, 8000.0000, 50.0000),
+(8, 4, 'Mild', 6400.0000, 8000.0000, 50.0000),
+(9, 5, 'Bone-In', 12800.0000, 16000.0000, 50.0000),
+(10, 5, 'Boneless', 12800.0000, 16000.0000, 50.0000),
+(11, 6, 'Organic', 4000.0000, 5000.0000, 50.0000),
+(12, 6, 'Regular', 4000.0000, 5000.0000, 50.0000),
+(13, 7, 'Lean', 20000.0000, 25000.0000, 50.0000),
+(14, 7, 'Fatty', 20000.0000, 25000.0000, 50.0000),
+(15, 8, 'Small', 40000.0000, 50000.0000, 50.0000),
+(16, 8, 'Medium', 40000.0000, 50000.0000, 50.0000),
+(17, 9, 'Boneless', 13600.0000, 17000.0000, 50.0000),
+(18, 9, 'Skinless', 13600.0000, 17000.0000, 50.0000),
+(19, 10, 'White', 16000.0000, 20000.0000, 50.0000),
+(20, 10, 'Brown', 16000.0000, 20000.0000, 50.0000),
+(21, 11, 'Regular', 11200.0000, 14000.0000, 50.0000),
+(22, 11, 'Spicy', 11200.0000, 14000.0000, 50.0000),
+(23, 12, 'Lean', 17600.0000, 22000.0000, 50.0000),
+(24, 12, 'Fatty', 17600.0000, 22000.0000, 50.0000),
+(25, 13, 'Refined', 72000.0000, 90000.0000, 50.0000),
+(26, 13, 'Semi-Refined', 72000.0000, 90000.0000, 50.0000),
+(27, 14, 'Refined', 20000.0000, 25000.0000, 50.0000),
+(28, 14, 'Semi-Refined', 20000.0000, 25000.0000, 50.0000),
+(29, 15, 'Regular', 24000.0000, 30000.0000, 50.0000),
+(30, 15, 'Pellet', 24000.0000, 30000.0000, 50.0000),
+(31, 16, 'Refined', 22400.0000, 28000.0000, 50.0000),
+(32, 16, 'Unrefined', 22400.0000, 28000.0000, 50.0000),
+(33, 17, 'Pure', 12000.0000, 15000.0000, 50.0000),
+(34, 17, 'Blended', 12000.0000, 15000.0000, 50.0000),
+(35, 18, 'Refined', 24000.0000, 30000.0000, 50.0000),
+(36, 18, 'Unrefined', 24000.0000, 30000.0000, 50.0000),
+(37, 19, 'Refined', 4800.0000, 6000.0000, 50.0000),
+(38, 19, 'Semi-Refined', 4800.0000, 6000.0000, 50.0000),
+(39, 20, 'Regular', 12000.0000, 15000.0000, 50.0000),
+(40, 20, 'Pellet', 12000.0000, 15000.0000, 50.0000),
+(41, 21, 'Pure', 6400.0000, 8000.0000, 50.0000),
+(42, 21, 'Blended', 6400.0000, 8000.0000, 50.0000),
+(43, 22, 'Refined', 76000.0000, 95000.0000, 50.0000),
+(44, 22, 'Unrefined', 76000.0000, 95000.0000, 50.0000),
+(45, 23, 'Refined', 21600.0000, 27000.0000, 50.0000),
+(46, 23, 'Pure', 21600.0000, 27000.0000, 50.0000),
+(47, 24, 'Refined', 5600.0000, 7000.0000, 50.0000),
+(48, 24, 'Unrefined', 5600.0000, 7000.0000, 50.0000),
+(49, 25, 'Pure', 16000.0000, 20000.0000, 50.0000),
+(50, 25, 'Blended', 16000.0000, 20000.0000, 50.0000),
+(51, 26, 'White', 9600.0000, 12000.0000, 35.0000),
+(52, 26, 'Brown', 9600.0000, 12000.0000, 35.0000),
+(53, 27, 'Granulated', 4800.0000, 6000.0000, 35.0000),
+(54, 27, 'Brown', 4800.0000, 6000.0000, 35.0000),
+(55, 28, 'Iodized', 2400.0000, 3000.0000, 35.0000),
+(56, 28, 'Non-Iodized', 2400.0000, 3000.0000, 35.0000),
+(57, 29, 'Lavender', 1600.0000, 2000.0000, 35.0000),
+(58, 29, 'Unscented', 1600.0000, 2000.0000, 35.0000),
+(59, 30, 'Fine', 4000.0000, 5000.0000, 35.0000),
+(60, 30, 'Coarse', 4000.0000, 5000.0000, 35.0000),
+(61, 31, 'Whole', 3200.0000, 4000.0000, 35.0000),
+(62, 31, 'Skimmed', 3200.0000, 4000.0000, 35.0000),
+(63, 32, 'Cheddar', 8000.0000, 10000.0000, 35.0000),
+(64, 32, 'Mozzarella', 8000.0000, 10000.0000, 35.0000),
+(65, 33, 'White', 17600.0000, 22000.0000, 35.0000),
+(66, 33, 'Brown', 17600.0000, 22000.0000, 35.0000),
+(67, 34, 'Granulated', 11200.0000, 14000.0000, 35.0000),
+(68, 34, 'Brown', 11200.0000, 14000.0000, 35.0000),
+(69, 35, 'Fine', 8800.0000, 11000.0000, 35.0000),
+(70, 35, 'Coarse', 8800.0000, 11000.0000, 35.0000),
+(71, 36, 'Lavender', 5600.0000, 7000.0000, 35.0000),
+(72, 36, 'Unscented', 5600.0000, 7000.0000, 35.0000),
+(73, 37, 'Plain', 4000.0000, 5000.0000, 35.0000),
+(74, 37, 'Flavored', 4000.0000, 5000.0000, 35.0000),
+(75, 38, 'Roasted', NULL, 20000.0000, 0.0000),
+(76, 38, 'Salted', NULL, 20000.0000, 0.0000),
+(77, 39, 'Raw', NULL, 10000.0000, 0.0000),
+(78, 39, 'Roasted', NULL, 10000.0000, 0.0000),
+(79, 40, 'Yellow', NULL, 15000.0000, 0.0000),
+(80, 40, 'White', NULL, 15000.0000, 0.0000),
+(81, 41, 'Whole', NULL, 12000.0000, 0.0000),
+(82, 41, 'Refined', NULL, 12000.0000, 0.0000),
+(83, 42, 'Maize', NULL, 8000.0000, 0.0000),
+(84, 42, 'Sunflower', NULL, 8000.0000, 0.0000),
+(85, 43, 'Raw', 20000.0000, 25000.0000, 35.0000),
+(86, 43, 'Processed', 20000.0000, 25000.0000, 35.0000),
+(87, 44, 'White', NULL, 9000.0000, 0.0000),
+(88, 44, 'Black', NULL, 9000.0000, 300.0000),
+(89, 45, 'Green', NULL, 7000.0000, 0.0000),
+(90, 45, 'Yellow', NULL, 7000.0000, 0.0000),
+(91, 46, 'Roasted', 8800.0000, 11000.0000, 35.0000),
+(92, 46, 'Salted', 8800.0000, 11000.0000, 35.0000),
+(93, 47, 'Raw', 17600.0000, 22000.0000, 35.0000),
+(94, 47, 'Roasted', 17600.0000, 22000.0000, 35.0000),
+(95, 48, 'Yellow', 6400.0000, 8000.0000, 35.0000),
+(96, 48, 'White', 6400.0000, 8000.0000, 35.0000),
+(97, 49, 'White', 4000.0000, 5000.0000, 35.0000),
+(98, 49, 'Black', 4000.0000, 5000.0000, 35.0000),
+(99, 50, 'Green', 3200.0000, 4000.0000, 35.0000),
+(100, 50, 'Yellow', 3200.0000, 4000.0000, 35.0000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_promos`
+--
+
+DROP TABLE IF EXISTS `sma_promos`;
+CREATE TABLE IF NOT EXISTS `sma_promos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `product2buy` int NOT NULL,
+  `product2get` int NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_purchases`
+--
+
+DROP TABLE IF EXISTS `sma_purchases`;
+CREATE TABLE IF NOT EXISTS `sma_purchases` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `reference_no` varchar(55) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `supplier_id` int NOT NULL,
+  `supplier` varchar(55) NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `note` varchar(1000) NOT NULL,
+  `total` decimal(25,4) DEFAULT NULL,
+  `product_discount` decimal(25,4) DEFAULT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `order_discount` decimal(25,4) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT NULL,
+  `product_tax` decimal(25,4) DEFAULT NULL,
+  `order_tax_id` int DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `status` varchar(55) DEFAULT '',
+  `payment_status` varchar(20) DEFAULT 'pending',
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `payment_term` tinyint DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
+  `return_id` int DEFAULT NULL,
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `return_purchase_ref` varchar(55) DEFAULT NULL,
+  `purchase_id` int DEFAULT NULL,
+  `return_purchase_total` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_purchases`
+--
+
+INSERT INTO `sma_purchases` (`id`, `reference_no`, `date`, `supplier_id`, `supplier`, `warehouse_id`, `note`, `total`, `product_discount`, `order_discount_id`, `order_discount`, `total_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `paid`, `status`, `payment_status`, `created_by`, `updated_by`, `updated_at`, `attachment`, `payment_term`, `due_date`, `return_id`, `surcharge`, `return_purchase_ref`, `purchase_id`, `return_purchase_total`, `cgst`, `sgst`, `igst`) VALUES
+(1, 'PO2025/08/0001', '2025-08-18 17:21:00', 4, 'AgroSupplier Ltd', 1, '&lt;p&gt;received total products&lt;&sol;p&gt;', 2160000.0000, 0.0000, '', 0.0000, 0.0000, 0.0000, 1, 0.0000, 0.0000, 0.0000, 2160000.0000, 2160000.0000, 'received', 'paid', 1, NULL, NULL, '1', 0, NULL, NULL, 0.0000, NULL, NULL, 0.0000, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_purchase_items`
+--
+
+DROP TABLE IF EXISTS `sma_purchase_items`;
+CREATE TABLE IF NOT EXISTS `sma_purchase_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `purchase_id` int DEFAULT NULL,
+  `transfer_id` int DEFAULT NULL,
+  `product_id` int NOT NULL,
+  `product_code` varchar(50) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `option_id` int DEFAULT NULL,
+  `net_unit_cost` decimal(25,4) NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(20) DEFAULT NULL,
+  `discount` varchar(20) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `expiry` date DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `quantity_balance` decimal(15,4) DEFAULT '0.0000',
+  `date` date NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `unit_cost` decimal(25,4) DEFAULT NULL,
+  `real_unit_cost` decimal(25,4) DEFAULT NULL,
+  `quantity_received` decimal(15,4) DEFAULT NULL,
+  `supplier_part_no` varchar(50) DEFAULT NULL,
+  `purchase_item_id` int DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  `base_unit_cost` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `purchase_id` (`purchase_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_purchase_items`
+--
+
+INSERT INTO `sma_purchase_items` (`id`, `purchase_id`, `transfer_id`, `product_id`, `product_code`, `product_name`, `option_id`, `net_unit_cost`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `expiry`, `subtotal`, `quantity_balance`, `date`, `status`, `unit_cost`, `real_unit_cost`, `quantity_received`, `supplier_part_no`, `purchase_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `gst`, `cgst`, `sgst`, `igst`, `base_unit_cost`) VALUES
+(1, 1, NULL, 44, 'A007', 'AgroHarvest Sesame Seeds 1Kg', 88, 7200.0000, 300.0000, 1, 0.0000, 0, '0', '0', 0.0000, NULL, 2160000.0000, 300.0000, '2025-08-18', 'received', 7200.0000, 7200.0000, 300.0000, 'SP044', NULL, 1, 'KG', 300.0000, NULL, NULL, NULL, NULL, 7200.0000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_quotes`
+--
+
+DROP TABLE IF EXISTS `sma_quotes`;
+CREATE TABLE IF NOT EXISTS `sma_quotes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `biller_id` int NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `internal_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT NULL,
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `supplier_id` int DEFAULT NULL,
+  `supplier` varchar(55) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_quote_items`
+--
+
+DROP TABLE IF EXISTS `sma_quote_items`;
+CREATE TABLE IF NOT EXISTS `sma_quote_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `quote_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `quote_id` (`quote_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_returns`
+--
+
+DROP TABLE IF EXISTS `sma_returns`;
+CREATE TABLE IF NOT EXISTS `sma_returns` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `biller_id` int NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `staff_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `total_items` smallint DEFAULT NULL,
+  `paid` decimal(25,4) DEFAULT '0.0000',
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_return_items`
+--
+
+DROP TABLE IF EXISTS `sma_return_items`;
+CREATE TABLE IF NOT EXISTS `sma_return_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `return_id` int UNSIGNED NOT NULL,
+  `product_id` int UNSIGNED NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `return_id` (`return_id`),
+  KEY `product_id` (`product_id`),
+  KEY `product_id_2` (`product_id`,`return_id`),
+  KEY `return_id_2` (`return_id`,`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_sales`
+--
+
+DROP TABLE IF EXISTS `sma_sales`;
+CREATE TABLE IF NOT EXISTS `sma_sales` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `biller_id` int NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `staff_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `sale_status` varchar(20) DEFAULT NULL,
+  `payment_status` varchar(20) DEFAULT NULL,
+  `payment_term` tinyint DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `total_items` smallint DEFAULT NULL,
+  `pos` tinyint(1) NOT NULL DEFAULT '0',
+  `paid` decimal(25,4) DEFAULT '0.0000',
+  `return_id` int DEFAULT NULL,
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `return_sale_ref` varchar(55) DEFAULT NULL,
+  `sale_id` int DEFAULT NULL,
+  `return_sale_total` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `rounding` decimal(10,4) DEFAULT NULL,
+  `suspend_note` varchar(255) DEFAULT NULL,
+  `api` tinyint(1) DEFAULT '0',
+  `shop` tinyint(1) DEFAULT '0',
+  `address_id` int DEFAULT NULL,
+  `reserve_id` int DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `manual_payment` varchar(55) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  `payment_method` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_sale_items`
+--
+
+DROP TABLE IF EXISTS `sma_sale_items`;
+CREATE TABLE IF NOT EXISTS `sma_sale_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `sale_id` int UNSIGNED NOT NULL,
+  `product_id` int UNSIGNED NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `sale_item_id` int DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sale_id` (`sale_id`),
+  KEY `product_id` (`product_id`),
+  KEY `product_id_2` (`product_id`,`sale_id`),
+  KEY `sale_id_2` (`sale_id`,`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_sessions`
+--
+
+DROP TABLE IF EXISTS `sma_sessions`;
+CREATE TABLE IF NOT EXISTS `sma_sessions` (
+  `id` varchar(40) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int UNSIGNED NOT NULL DEFAULT '0',
+  `data` blob NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ci_sessions_timestamp` (`timestamp`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_sessions`
+--
+
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
+('gjsjer4cn8ajeb29eorjde19gl1gh0jv', '::1', 1755573124, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537333132343b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d6c6173745f61637469766974797c693a313735353537323731353b),
+('14lv1trevfoak39m6kvp17qf5ocm9mmj', '::1', 1755572978, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537323934313b),
+('3u0tjbhnsjfvfiud55s0cc5ps8iernbp', '::1', 1755573454, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537333435343b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d6c6173745f61637469766974797c693a313735353537333339383b),
+('i25g2evlk8vh17gr8vrif6i1p43h82uk', '::1', 1755574209, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537343230393b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d6c6173745f61637469766974797c693a313735353537333339383b),
+('ff8069h8len62p2pab2s4emt225g97k0', '::1', 1755574379, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537343230393b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d6c6173745f61637469766974797c693a313735353537333339383b),
+('1pooqb2a3cpr1ate4uflkmt6vd78n4d8', '::1', 1755572586, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537323538363b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('2far0kgp90p3opnr680femk1rccot2ks', '::1', 1755571837, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537313833373b),
+('pt1rcbc7tns4hiua36r7imrade2kggtl', '::1', 1755571166, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537313133353b5f5f63695f766172737c613a313a7b733a353a226572726f72223b733a333a226f6c64223b7d),
+('olafv94jlvf446d4fapd0q1d8ad121i6', '::1', 1755572941, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537323934313b),
+('lj9a2u4e2lo98il8e9hqavmuvj3324h0', '::1', 1755572236, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537323233363b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('n6vihab78v9v9jjmk6ak24pfqretmn4v', '::1', 1755570545, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537303534353b),
+('q7knhmgrul4f72nnqm5fhntugpku1p4n', '::1', 1755571927, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537313932373b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('9obqqlmu4mlrf4asorld5fcvkmvq8sbg', '::1', 1755571078, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537313037383b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('bv1cv1575176rgpmovdq0dgbv5hhsgsp', '::1', 1755568924, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353536383932343b),
+('mcfb57f8ecnvgslj81lfncceciqqs9un', '::1', 1755523006, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532333030363b7265717565737465645f706167657c733a353a2261646d696e223b),
+('46rpsrak5g26f7jc3k97n1uh0p3dqra8', '::1', 1755523353, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532333335333b7265717565737465645f706167657c733a353a2261646d696e223b),
+('ul3mkqfar40n2b2rvatojuosbnl44k2a', '::1', 1755525714, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532353731343b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
+('nia86e21g85e0fv42h8qb1icu368std1', '::1', 1755526276, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532363237363b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
+('oufsg9t3b1fl6udrbu1ok4kfqcadkiem', '::1', 1755526228, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532363232383b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('845fe0sf94hmbgkscofja8decs3k5l89', '::1', 1755526538, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532363533383b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('5tlqv9poj04i2g4kgg46g1cbca3o3tl0', '::1', 1755531883, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533313838333b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a313a7b733a373a226d657373616765223b733a333a226f6c64223b7d),
+('g3hdep4l3lbgqud94g1vfgdqbnt7hn2j', '::1', 1755529061, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532393036313b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('r55s87326ai27e9evfnns27taigsahro', '::1', 1755529367, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532393336373b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('bo4jst7rga5e6b2eietc6g71844ldmkr', '::1', 1755529734, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353532393733343b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('itft66okd354l1d6vhjldc1iq1al5g8l', '::1', 1755530907, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533303930373b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('eo9gdrp4o5pjfesvuqu3j4ianccujgh9', '::1', 1755531211, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533313231313b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('647pn1k3kv9b7lren46co9hhrdqi5a93', '::1', 1755536852, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533363835323b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('b8pdb8l7526tki18cc52250cfseeuddn', '::1', 1755534086, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533343038363b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('6s6ns9alcd3fuvisfu0lqk0f4ld64rj5', '::1', 1755535126, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533353132363b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('bvilmtlfhi1euvh2rlopiguunj049m48', '::1', 1755535453, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533353435333b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('462ftm9iet3eoj5gphn3bpasdp5p095i', '::1', 1755535848, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533353834383b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('1b05oterh4b4n5u3ehlptun2p2jenmjq', '::1', 1755536285, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533363238353b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('33oojq52opo1c33t4bd55tij5nt3qb1i', '::1', 1755536671, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533363637313b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('ta26avfqhtro6v49ffl97g8ts7pfi7pv', '::1', 1755537312, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373331323b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('5ruhg3b3kgp252tk790o2b0tv173l02s', '::1', 1755537178, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373137383b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('rvpth9kla0fckr1m755n08eki8ttigsv', '::1', 1755537488, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373438383b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b),
+('n9sn7gbpgqfn95m3j5r1i390mp8ra8vh', '::1', 1755537339, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373331323b7265717565737465645f706167657c733a35313a2263617465676f72792f696e647573747269616c2d70726f63657373696e672d70726f64756374732f736f796265616e2d6f696c223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535313733303030223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d),
+('4f9bf2e6miireis9u490etthuvroh3q0', '::1', 1755537794, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373739343b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b757365725f637372667c733a32303a22705537316257524c49364a4f41794d7843776e59223b),
+('1ulj66fcaartm1igq1lhjo21vj6ls7jn', '::1', 1755537794, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373739343b),
+('rmbg4sg5jcij69susj630tu5b2n5ta3f', '::1', 1755537794, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373739343b6572726f727c733a37363a223c68343e343034204e6f7420466f756e64213c2f68343e3c703e546865207061676520796f7520617265206c6f6f6b696e6720666f722063616e206e6f7420626520666f756e642e3c2f703e223b5f5f63695f766172737c613a313a7b733a353a226572726f72223b733a333a226e6577223b7d),
+('g9qn8qbc2plnhjhfhi9cg5bhlafjc1cr', '::1', 1755537794, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533373739343b),
+('pbr1mnugr10nbhg6lr61lf8gdna0t5sa', '::1', 1755539461, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533393436313b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b757365725f637372667c733a32303a22705537316257524c49364a4f41794d7843776e59223b),
+('0aoe8afchgt6c997pdfjhb2sqc274luk', '::1', 1755539945, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353533393934353b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b757365725f637372667c733a32303a22705537316257524c49364a4f41794d7843776e59223b),
+('tnqm1as5np0ddj1t0pv1kn6m54f3k2fm', '::1', 1755540286, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353534303238363b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b757365725f637372667c733a32303a22705537316257524c49364a4f41794d7843776e59223b),
+('q4vks2ttfr2jtl9t2phmdpltsp4g7rod', '::1', 1755540545, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353534303238363b7265717565737465645f706167657c733a353a2261646d696e223b5f5f63695f766172737c613a323a7b733a353a226572726f72223b733a333a226f6c64223b733a373a226d657373616765223b733a333a226f6c64223b7d6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353233333731223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b757365725f637372667c733a32303a22705537316257524c49364a4f41794d7843776e59223b),
+('cilcfse7p90r6l3pnpeh604htof13ito', '::1', 1755570480, 0x5f5f63695f6c6173745f726567656e65726174657c693a313735353537303438303b7265717565737465645f706167657c733a353a2261646d696e223b6964656e746974797c733a31383a226f776e65724074656364696172792e636f6d223b757365726e616d657c733a353a226f776e6572223b656d61696c7c733a31383a226f776e65724074656364696172792e636f6d223b757365725f69647c733a313a2231223b6f6c645f6c6173745f6c6f67696e7c733a31303a2231373535353235393234223b6c6173745f69707c733a333a223a3a31223b6176617461727c4e3b67656e6465727c733a343a226d616c65223b67726f75705f69647c733a313a2231223b77617265686f7573655f69647c4e3b766965775f72696768747c733a313a2230223b656469745f72696768747c733a313a2230223b616c6c6f775f646973636f756e747c733a313a2230223b62696c6c65725f69647c4e3b636f6d70616e795f69647c4e3b73686f775f636f73747c733a313a2230223b73686f775f70726963657c733a313a2230223b5f5f63695f766172737c613a323a7b733a373a226d657373616765223b733a333a226f6c64223b733a353a226572726f72223b733a333a226f6c64223b7d);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_settings`
+--
+
+DROP TABLE IF EXISTS `sma_settings`;
+CREATE TABLE IF NOT EXISTS `sma_settings` (
+  `setting_id` int NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `logo2` varchar(255) NOT NULL,
+  `site_name` varchar(55) NOT NULL,
+  `language` varchar(20) NOT NULL,
+  `default_warehouse` int NOT NULL,
+  `accounting_method` tinyint NOT NULL DEFAULT '0',
+  `default_currency` varchar(3) NOT NULL,
+  `default_tax_rate` int NOT NULL,
+  `rows_per_page` int NOT NULL,
+  `version` varchar(10) NOT NULL DEFAULT '1.0',
+  `default_tax_rate2` int NOT NULL DEFAULT '0',
+  `dateformat` int NOT NULL,
+  `sales_prefix` varchar(20) DEFAULT NULL,
+  `quote_prefix` varchar(20) DEFAULT NULL,
+  `purchase_prefix` varchar(20) DEFAULT NULL,
+  `transfer_prefix` varchar(20) DEFAULT NULL,
+  `delivery_prefix` varchar(20) DEFAULT NULL,
+  `payment_prefix` varchar(20) DEFAULT NULL,
+  `return_prefix` varchar(20) DEFAULT NULL,
+  `returnp_prefix` varchar(20) DEFAULT NULL,
+  `expense_prefix` varchar(20) DEFAULT NULL,
+  `item_addition` tinyint(1) NOT NULL DEFAULT '0',
+  `theme` varchar(20) NOT NULL,
+  `product_serial` tinyint NOT NULL,
+  `default_discount` int NOT NULL,
+  `product_discount` tinyint(1) NOT NULL DEFAULT '0',
+  `discount_method` tinyint NOT NULL,
+  `tax1` tinyint NOT NULL,
+  `tax2` tinyint NOT NULL,
+  `overselling` tinyint(1) NOT NULL DEFAULT '0',
+  `restrict_user` tinyint NOT NULL DEFAULT '0',
+  `restrict_calendar` tinyint NOT NULL DEFAULT '0',
+  `timezone` varchar(100) DEFAULT NULL,
+  `iwidth` int NOT NULL DEFAULT '0',
+  `iheight` int NOT NULL,
+  `twidth` int NOT NULL,
+  `theight` int NOT NULL,
+  `watermark` tinyint(1) DEFAULT NULL,
+  `reg_ver` tinyint(1) DEFAULT NULL,
+  `allow_reg` tinyint(1) DEFAULT NULL,
+  `reg_notification` tinyint(1) DEFAULT NULL,
+  `auto_reg` tinyint(1) DEFAULT NULL,
+  `protocol` varchar(20) NOT NULL DEFAULT 'mail',
+  `mailpath` varchar(55) DEFAULT '/usr/sbin/sendmail',
+  `smtp_host` varchar(100) DEFAULT NULL,
+  `smtp_user` varchar(100) DEFAULT NULL,
+  `smtp_pass` varchar(255) DEFAULT NULL,
+  `smtp_port` varchar(10) DEFAULT '25',
+  `smtp_crypto` varchar(10) DEFAULT NULL,
+  `corn` datetime DEFAULT NULL,
+  `customer_group` int NOT NULL,
+  `default_email` varchar(100) NOT NULL,
+  `mmode` tinyint(1) NOT NULL,
+  `bc_fix` tinyint NOT NULL DEFAULT '0',
+  `auto_detect_barcode` tinyint(1) NOT NULL DEFAULT '0',
+  `captcha` tinyint(1) NOT NULL DEFAULT '1',
+  `reference_format` tinyint(1) NOT NULL DEFAULT '1',
+  `racks` tinyint(1) DEFAULT '0',
+  `attributes` tinyint(1) NOT NULL DEFAULT '0',
+  `product_expiry` tinyint(1) NOT NULL DEFAULT '0',
+  `decimals` tinyint NOT NULL DEFAULT '2',
+  `qty_decimals` tinyint NOT NULL DEFAULT '2',
+  `decimals_sep` varchar(2) NOT NULL DEFAULT '.',
+  `thousands_sep` varchar(2) NOT NULL DEFAULT ',',
+  `invoice_view` tinyint(1) DEFAULT '0',
+  `default_biller` int DEFAULT NULL,
+  `envato_username` varchar(50) DEFAULT NULL,
+  `purchase_code` varchar(100) DEFAULT NULL,
+  `rtl` tinyint(1) DEFAULT '0',
+  `each_spent` decimal(15,4) DEFAULT NULL,
+  `ca_point` tinyint DEFAULT NULL,
+  `each_sale` decimal(15,4) DEFAULT NULL,
+  `sa_point` tinyint DEFAULT NULL,
+  `update` tinyint(1) DEFAULT '0',
+  `sac` tinyint(1) DEFAULT '0',
+  `display_all_products` tinyint(1) DEFAULT '0',
+  `display_symbol` tinyint(1) DEFAULT NULL,
+  `symbol` varchar(50) DEFAULT NULL,
+  `remove_expired` tinyint(1) DEFAULT '0',
+  `barcode_separator` varchar(2) NOT NULL DEFAULT '-',
+  `set_focus` tinyint(1) NOT NULL DEFAULT '0',
+  `price_group` int DEFAULT NULL,
+  `barcode_img` tinyint(1) NOT NULL DEFAULT '1',
+  `ppayment_prefix` varchar(20) DEFAULT 'POP',
+  `disable_editing` smallint DEFAULT '90',
+  `qa_prefix` varchar(55) DEFAULT NULL,
+  `update_cost` tinyint(1) DEFAULT NULL,
+  `apis` tinyint(1) NOT NULL DEFAULT '0',
+  `state` varchar(100) DEFAULT NULL,
+  `pdf_lib` varchar(20) DEFAULT 'dompdf',
+  `use_code_for_slug` tinyint(1) DEFAULT NULL,
+  `ws_barcode_type` varchar(10) DEFAULT 'weight',
+  `ws_barcode_chars` tinyint DEFAULT NULL,
+  `flag_chars` tinyint DEFAULT NULL,
+  `item_code_start` tinyint DEFAULT NULL,
+  `item_code_chars` tinyint DEFAULT NULL,
+  `price_start` tinyint DEFAULT NULL,
+  `price_chars` tinyint DEFAULT NULL,
+  `price_divide_by` int DEFAULT NULL,
+  `weight_start` tinyint DEFAULT NULL,
+  `weight_chars` tinyint DEFAULT NULL,
+  `weight_divide_by` int DEFAULT NULL,
+  `ksa_qrcode` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_settings`
+--
+
+INSERT INTO `sma_settings` (`setting_id`, `logo`, `logo2`, `site_name`, `language`, `default_warehouse`, `accounting_method`, `default_currency`, `default_tax_rate`, `rows_per_page`, `version`, `default_tax_rate2`, `dateformat`, `sales_prefix`, `quote_prefix`, `purchase_prefix`, `transfer_prefix`, `delivery_prefix`, `payment_prefix`, `return_prefix`, `returnp_prefix`, `expense_prefix`, `item_addition`, `theme`, `product_serial`, `default_discount`, `product_discount`, `discount_method`, `tax1`, `tax2`, `overselling`, `restrict_user`, `restrict_calendar`, `timezone`, `iwidth`, `iheight`, `twidth`, `theight`, `watermark`, `reg_ver`, `allow_reg`, `reg_notification`, `auto_reg`, `protocol`, `mailpath`, `smtp_host`, `smtp_user`, `smtp_pass`, `smtp_port`, `smtp_crypto`, `corn`, `customer_group`, `default_email`, `mmode`, `bc_fix`, `auto_detect_barcode`, `captcha`, `reference_format`, `racks`, `attributes`, `product_expiry`, `decimals`, `qty_decimals`, `decimals_sep`, `thousands_sep`, `invoice_view`, `default_biller`, `envato_username`, `purchase_code`, `rtl`, `each_spent`, `ca_point`, `each_sale`, `sa_point`, `update`, `sac`, `display_all_products`, `display_symbol`, `symbol`, `remove_expired`, `barcode_separator`, `set_focus`, `price_group`, `barcode_img`, `ppayment_prefix`, `disable_editing`, `qa_prefix`, `update_cost`, `apis`, `state`, `pdf_lib`, `use_code_for_slug`, `ws_barcode_type`, `ws_barcode_chars`, `flag_chars`, `item_code_start`, `item_code_chars`, `price_start`, `price_chars`, `price_divide_by`, `weight_start`, `weight_chars`, `weight_divide_by`, `ksa_qrcode`) VALUES
+(1, 'logo2.png', 'logo3.png', 'cajam-mult-store', 'english', 1, 0, 'TZS', 1, 10, '3.4.53', 1, 5, 'SALE', 'QUOTE', 'PO', 'TR', 'DO', 'IPAY', 'SR', 'PR', '', 0, 'default', 1, 1, 1, 1, 0, 0, 0, 1, 0, 'Africa/Dar_es_Salaam', 800, 800, 150, 150, 1, 0, 0, 0, NULL, 'mail', '/usr/sbin/sendmail', 'pop.gmail.com', 'contact@sma.tecdiary.org', 'jEFTM4T63AiQ9dsidxhPKt9CIg4HQjCN58n/RW9vmdC/UDXCzRLR469ziZ0jjpFlbOg43LyoSmpJLBkcAHh0Yw==', '25', NULL, NULL, 1, 'sales@cajam.co.tz', 0, 4, 1, 0, 2, 1, 1, 0, 2, 2, '.', ',', 0, 3, 'REKA197380', 'c89x223w4590', 0, NULL, NULL, NULL, NULL, 0, 0, 1, 0, '', 0, '-', 0, 1, 1, 'POP', 90, '', 0, 1, 'AN', 'dompdf', 1, 'weight', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_shop_settings`
+--
+
+DROP TABLE IF EXISTS `sma_shop_settings`;
+CREATE TABLE IF NOT EXISTS `sma_shop_settings` (
+  `shop_id` int NOT NULL,
+  `shop_name` varchar(55) NOT NULL,
+  `description` varchar(160) NOT NULL,
+  `warehouse` int NOT NULL,
+  `biller` int NOT NULL,
+  `about_link` varchar(55) NOT NULL,
+  `terms_link` varchar(55) NOT NULL,
+  `privacy_link` varchar(55) NOT NULL,
+  `contact_link` varchar(55) NOT NULL,
+  `payment_text` varchar(100) NOT NULL,
+  `follow_text` varchar(100) NOT NULL,
+  `facebook` varchar(55) NOT NULL,
+  `twitter` varchar(55) DEFAULT NULL,
+  `google_plus` varchar(55) DEFAULT NULL,
+  `instagram` varchar(55) DEFAULT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `email` varchar(55) DEFAULT NULL,
+  `cookie_message` varchar(180) DEFAULT NULL,
+  `cookie_link` varchar(55) DEFAULT NULL,
+  `slider` text,
+  `shipping` int DEFAULT NULL,
+  `purchase_code` varchar(100) DEFAULT 'purchase_code',
+  `envato_username` varchar(50) DEFAULT 'envato_username',
+  `version` varchar(10) DEFAULT '3.4.53',
+  `logo` varchar(55) DEFAULT NULL,
+  `bank_details` varchar(255) DEFAULT NULL,
+  `products_page` tinyint(1) DEFAULT NULL,
+  `hide0` tinyint(1) DEFAULT '0',
+  `products_description` varchar(255) DEFAULT NULL,
+  `private` tinyint(1) DEFAULT '0',
+  `hide_price` tinyint(1) DEFAULT '0',
+  `stripe` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`shop_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_shop_settings`
+--
+
+INSERT INTO `sma_shop_settings` (`shop_id`, `shop_name`, `description`, `warehouse`, `biller`, `about_link`, `terms_link`, `privacy_link`, `contact_link`, `payment_text`, `follow_text`, `facebook`, `twitter`, `google_plus`, `instagram`, `phone`, `email`, `cookie_message`, `cookie_link`, `slider`, `shipping`, `purchase_code`, `envato_username`, `version`, `logo`, `bank_details`, `products_page`, `hide0`, `products_description`, `private`, `hide_price`, `stripe`) VALUES
+(1, 'Cajam Mult Store', 'Cajam Mult Store Is Ecommerce Shop that would help you to sell your products from your site.', 1, 3, '', '', '', '', 'We accept PayPal or you can pay with your credit/debit cards.', 'Please click the link below to follow us on social media.', 'http://facebook.com/tecdiary', 'http://twitter.com/tecdiary', '', '', '0747003357', 'info@cajam.co.tz', 'We use cookies to improve your experience on our website. By browsing this website, you agree to our use of cookies.', '', '[{\"image\":\"89574ea2f565c29e0b5199eb0ab45241.jpg\",\"link\":\"https:\\/\\/cajam.co.tz\\/wp-content\\/uploads\\/elementor\\/thumbs\\/IMG-20231002-WA0006-r63f4fn1ihhfabenfd6cdi6shbbds9q8q7ujpksh50.jpg\",\"caption\":\"\"},{\"image\":\"1b0c9ceb727a350dcd66e412a8d25ed0.jpg\",\"link\":\"https:\\/\\/cajam.co.tz\\/wp-content\\/uploads\\/elementor\\/thumbs\\/IMG-20231002-WA0006-r63f4fn1ihhfabenfd6cdi6shbbds9q8q7ujpksh50.jpg\",\"caption\":\"\"},{\"image\":\"b31cb00deea1dfb137f619aca442ffb1.jpg\",\"link\":\"https:\\/\\/cajam.co.tz\\/wp-content\\/uploads\\/elementor\\/thumbs\\/IMG-20231002-WA0006-r63f4fn1ihhfabenfd6cdi6shbbds9q8q7ujpksh50.jpg\",\"caption\":\"\"},{\"image\":\"73d539c7d07dbfc91f131c5cf662da16.jpg\",\"link\":\"https:\\/\\/cajam.co.tz\\/wp-content\\/uploads\\/elementor\\/thumbs\\/IMG-20231002-WA0006-r63f4fn1ihhfabenfd6cdi6shbbds9q8q7ujpksh50.jpg\",\"caption\":\"\"},{\"image\":\"be051a5b89c78b41c3215a96162f8fb5.jpg\",\"link\":\"https:\\/\\/cajam.co.tz\\/wp-content\\/uploads\\/elementor\\/thumbs\\/IMG-20231002-WA0006-r63f4fn1ihhfabenfd6cdi6shbbds9q8q7ujpksh50.jpg\",\"caption\":\"\"}]', 1, '', 'envato_username', '3.4.53', 'sma-shop.png', '', 0, 0, 'Cajam Mult Store is a modern eCommerce platform designed to help you showcase and sell your products directly from your own website. Whether you offer fashion, electronics, home goods, or digital products, Cajam Mult Store provides a smooth shopping exper', 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_skrill`
+--
+
+DROP TABLE IF EXISTS `sma_skrill`;
+CREATE TABLE IF NOT EXISTS `sma_skrill` (
+  `id` int NOT NULL,
+  `active` tinyint NOT NULL,
+  `account_email` varchar(255) NOT NULL DEFAULT 'testaccount2@moneybookers.com',
+  `secret_word` varchar(20) NOT NULL DEFAULT 'mbtest',
+  `skrill_currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `fixed_charges` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `extra_charges_my` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `extra_charges_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_skrill`
+--
+
+INSERT INTO `sma_skrill` (`id`, `active`, `account_email`, `secret_word`, `skrill_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES
+(1, 1, 'testaccount2@moneybookers.com', 'mbtest', 'USD', 0.0000, 0.0000, 0.0000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_sms_settings`
+--
+
+DROP TABLE IF EXISTS `sma_sms_settings`;
+CREATE TABLE IF NOT EXISTS `sma_sms_settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `auto_send` tinyint(1) DEFAULT NULL,
+  `config` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_sms_settings`
+--
+
+INSERT INTO `sma_sms_settings` (`id`, `auto_send`, `config`) VALUES
+(1, NULL, '{\"gateway\":\"Log\",\"Log\":{}');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_stock_counts`
+--
+
+DROP TABLE IF EXISTS `sma_stock_counts`;
+CREATE TABLE IF NOT EXISTS `sma_stock_counts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL,
+  `reference_no` varchar(55) NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `initial_file` varchar(50) NOT NULL,
+  `final_file` varchar(50) DEFAULT NULL,
+  `brands` varchar(50) DEFAULT NULL,
+  `brand_names` varchar(100) DEFAULT NULL,
+  `categories` varchar(50) DEFAULT NULL,
+  `category_names` varchar(100) DEFAULT NULL,
+  `note` text,
+  `products` int DEFAULT NULL,
+  `rows` int DEFAULT NULL,
+  `differences` int DEFAULT NULL,
+  `matches` int DEFAULT NULL,
+  `missing` int DEFAULT NULL,
+  `created_by` int NOT NULL,
+  `updated_by` int DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `finalized` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_stock_count_items`
+--
+
+DROP TABLE IF EXISTS `sma_stock_count_items`;
+CREATE TABLE IF NOT EXISTS `sma_stock_count_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `stock_count_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `product_code` varchar(50) DEFAULT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
+  `product_variant` varchar(55) DEFAULT NULL,
+  `product_variant_id` int DEFAULT NULL,
+  `expected` decimal(15,4) NOT NULL,
+  `counted` decimal(15,4) NOT NULL,
+  `cost` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stock_count_id` (`stock_count_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_suspended_bills`
+--
+
+DROP TABLE IF EXISTS `sma_suspended_bills`;
+CREATE TABLE IF NOT EXISTS `sma_suspended_bills` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `customer_id` int NOT NULL,
+  `customer` varchar(55) DEFAULT NULL,
+  `count` int NOT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `order_tax_id` int DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `biller_id` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `created_by` int NOT NULL,
+  `suspend_note` varchar(255) DEFAULT NULL,
+  `shipping` decimal(15,4) DEFAULT '0.0000',
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_suspended_items`
+--
+
+DROP TABLE IF EXISTS `sma_suspended_items`;
+CREATE TABLE IF NOT EXISTS `sma_suspended_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `suspend_id` int UNSIGNED NOT NULL,
+  `product_id` int UNSIGNED NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) NOT NULL,
+  `quantity` decimal(15,4) DEFAULT '0.0000',
+  `warehouse_id` int DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `option_id` int DEFAULT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_tax_rates`
+--
+
+DROP TABLE IF EXISTS `sma_tax_rates`;
+CREATE TABLE IF NOT EXISTS `sma_tax_rates` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(55) NOT NULL,
+  `code` varchar(10) DEFAULT NULL,
+  `rate` decimal(12,4) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_tax_rates`
+--
+
+INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES
+(1, 'No Tax', 'NT', 0.0000, '2'),
+(2, 'VAT @10%', 'VAT10', 10.0000, '1'),
+(4, 'VAT @20%', 'VT20', 20.0000, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_transfers`
+--
+
+DROP TABLE IF EXISTS `sma_transfers`;
+CREATE TABLE IF NOT EXISTS `sma_transfers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `transfer_no` varchar(55) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `from_warehouse_id` int NOT NULL,
+  `from_warehouse_code` varchar(55) NOT NULL,
+  `from_warehouse_name` varchar(55) NOT NULL,
+  `to_warehouse_id` int NOT NULL,
+  `to_warehouse_code` varchar(55) NOT NULL,
+  `to_warehouse_name` varchar(55) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT NULL,
+  `grand_total` decimal(25,4) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `status` varchar(55) NOT NULL DEFAULT 'pending',
+  `shipping` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_transfer_items`
+--
+
+DROP TABLE IF EXISTS `sma_transfer_items`;
+CREATE TABLE IF NOT EXISTS `sma_transfer_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `transfer_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `option_id` int DEFAULT NULL,
+  `expiry` date DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `tax_rate_id` int DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `net_unit_cost` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) DEFAULT NULL,
+  `quantity_balance` decimal(15,4) NOT NULL,
+  `unit_cost` decimal(25,4) DEFAULT NULL,
+  `real_unit_cost` decimal(25,4) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
+  `product_unit_id` int DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `transfer_id` (`transfer_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_units`
+--
+
+DROP TABLE IF EXISTS `sma_units`;
+CREATE TABLE IF NOT EXISTS `sma_units` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `base_unit` int DEFAULT NULL,
+  `operator` varchar(1) DEFAULT NULL,
+  `unit_value` varchar(55) DEFAULT NULL,
+  `operation_value` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `base_unit` (`base_unit`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_units`
+--
+
+INSERT INTO `sma_units` (`id`, `code`, `name`, `base_unit`, `operator`, `unit_value`, `operation_value`) VALUES
+(1, 'KG', 'Kilogram', NULL, NULL, NULL, NULL),
+(2, 'LT', 'Litre', NULL, NULL, NULL, NULL),
+(3, 'PC', 'Piece', NULL, NULL, NULL, NULL),
+(4, 'BD', 'Bundle', NULL, NULL, NULL, NULL),
+(5, 'PK', 'PACK', NULL, NULL, NULL, NULL),
+(6, 'PO', 'POULTRY', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_users`
+--
+
+DROP TABLE IF EXISTS `sma_users`;
+CREATE TABLE IF NOT EXISTS `sma_users` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `last_ip_address` varbinary(45) DEFAULT NULL,
+  `ip_address` varbinary(45) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `salt` varchar(40) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `activation_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_time` int UNSIGNED DEFAULT NULL,
+  `remember_code` varchar(40) DEFAULT NULL,
+  `created_on` int UNSIGNED NOT NULL,
+  `last_login` int UNSIGNED DEFAULT NULL,
+  `active` tinyint UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `avatar` varchar(55) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `group_id` int UNSIGNED NOT NULL,
+  `warehouse_id` int UNSIGNED DEFAULT NULL,
+  `biller_id` int UNSIGNED DEFAULT NULL,
+  `company_id` int DEFAULT NULL,
+  `show_cost` tinyint(1) DEFAULT '0',
+  `show_price` tinyint(1) DEFAULT '0',
+  `award_points` int DEFAULT '0',
+  `view_right` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_right` tinyint(1) NOT NULL DEFAULT '0',
+  `allow_discount` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`,`warehouse_id`,`biller_id`),
+  KEY `group_id_2` (`group_id`,`company_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_users`
+--
+
+INSERT INTO `sma_users` (`id`, `last_ip_address`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`, `avatar`, `gender`, `group_id`, `warehouse_id`, `biller_id`, `company_id`, `show_cost`, `show_price`, `award_points`, `view_right`, `edit_right`, `allow_discount`) VALUES
+(1, 0x3a3a31, 0x0000, 'owner', '2c8ab736b2ccab4f50e72d5fd7d21020cbb77ae7', NULL, 'owner@tecdiary.com', NULL, NULL, NULL, NULL, 1351661704, 1755568697, 1, 'Owner', 'Owner', 'Stock Manager', '012345678', NULL, 'male', 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(2, 0x3a3a31, 0x0000, 'admin', 'c1abe23d7891bd9addeaa6dc9aebf9a0d8ce1039', NULL, 'wolinetrn@gmail.com', NULL, NULL, NULL, NULL, 1755107721, 1755154713, 1, 'Admin', 'Admin', 'Stock Manager', '012345679', NULL, 'male', 2, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_user_logins`
+--
+
+DROP TABLE IF EXISTS `sma_user_logins`;
+CREATE TABLE IF NOT EXISTS `sma_user_logins` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `company_id` int DEFAULT NULL,
+  `ip_address` varbinary(16) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_user_logins`
+--
+
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES
+(1, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-13 17:55:20'),
+(2, 2, NULL, 0x3a3a31, 'admin@tecdiary.com', '2025-08-14 06:58:33'),
+(3, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-14 07:07:25'),
+(4, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-14 09:46:41'),
+(5, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-14 12:03:20'),
+(6, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-18 13:22:51'),
+(7, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-18 14:05:24'),
+(8, 1, NULL, 0x3a3a31, 'owner@tecdiary.com', '2025-08-19 01:58:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_variants`
+--
+
+DROP TABLE IF EXISTS `sma_variants`;
+CREATE TABLE IF NOT EXISTS `sma_variants` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_warehouses`
+--
+
+DROP TABLE IF EXISTS `sma_warehouses`;
+CREATE TABLE IF NOT EXISTS `sma_warehouses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `map` varchar(255) DEFAULT NULL,
+  `phone` varchar(55) DEFAULT NULL,
+  `email` varchar(55) DEFAULT NULL,
+  `price_group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_warehouses`
+--
+
+INSERT INTO `sma_warehouses` (`id`, `code`, `name`, `address`, `map`, `phone`, `email`, `price_group_id`) VALUES
+(1, 'WHI', 'CAJAM MINI SUPERMARKET', '<p>Address, City</p>', NULL, '012345678', 'cmsupermarket@cajam-mult-store.com', 1),
+(2, 'WHII', 'CAJAM PIG FARM', '<p>CAJAM MINI SUPERMARKET</p>', NULL, '0105292122', 'sales@cajam.co.tz', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_warehouses_products`
+--
+
+DROP TABLE IF EXISTS `sma_warehouses_products`;
+CREATE TABLE IF NOT EXISTS `sma_warehouses_products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `rack` varchar(55) DEFAULT NULL,
+  `avg_cost` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_warehouses_products`
+--
+
+INSERT INTO `sma_warehouses_products` (`id`, `product_id`, `warehouse_id`, `quantity`, `rack`, `avg_cost`) VALUES
+(1, 1, 1, 100.0000, 'R1', 12000.0000),
+(2, 2, 1, 100.0000, 'R1', 14400.0000),
+(3, 3, 1, 100.0000, 'R1', 8000.0000),
+(4, 4, 1, 100.0000, 'R1', 6400.0000),
+(5, 5, 1, 100.0000, 'R1', 12800.0000),
+(6, 6, 1, 100.0000, 'R1', 4000.0000),
+(7, 7, 1, 100.0000, 'R1', 20000.0000),
+(8, 8, 1, 100.0000, 'R1', 40000.0000),
+(9, 9, 1, 100.0000, 'R1', 13600.0000),
+(10, 10, 1, 100.0000, 'R1', 16000.0000),
+(11, 11, 1, 100.0000, 'R1', 11200.0000),
+(12, 12, 1, 100.0000, 'R1', 17600.0000),
+(13, 13, 1, 100.0000, 'R2', 72000.0000),
+(14, 14, 1, 100.0000, 'R2', 20000.0000),
+(15, 15, 1, 100.0000, 'R2', 24000.0000),
+(16, 16, 1, 100.0000, 'R2', 22400.0000),
+(17, 17, 1, 100.0000, 'R2', 12000.0000),
+(18, 18, 1, 100.0000, 'R2', 24000.0000),
+(19, 19, 1, 100.0000, 'R2', 4800.0000),
+(20, 20, 1, 100.0000, 'R2', 12000.0000),
+(21, 21, 1, 100.0000, 'R2', 6400.0000),
+(22, 22, 1, 100.0000, 'R2', 76000.0000),
+(23, 23, 1, 100.0000, 'R2', 21600.0000),
+(24, 24, 1, 100.0000, 'R2', 5600.0000),
+(25, 25, 1, 100.0000, 'R2', 16000.0000),
+(26, 26, 1, 100.0000, 'R3', 9600.0000),
+(27, 27, 1, 100.0000, 'R3', 4800.0000),
+(28, 28, 1, 100.0000, 'R3', 2400.0000),
+(29, 29, 1, 100.0000, 'R3', 1600.0000),
+(30, 30, 1, 100.0000, 'R3', 4000.0000),
+(31, 31, 1, 100.0000, 'R3', 3200.0000),
+(32, 32, 1, 100.0000, 'R3', 8000.0000),
+(33, 33, 1, 100.0000, 'R3', 17600.0000),
+(34, 34, 1, 100.0000, 'R3', 11200.0000),
+(35, 35, 1, 100.0000, 'R3', 8800.0000),
+(36, 36, 1, 100.0000, 'R3', 5600.0000),
+(37, 37, 1, 100.0000, 'R3', 4000.0000),
+(38, 38, 1, 0.0000, 'R4', 16000.0000),
+(39, 39, 1, 0.0000, 'R4', 8000.0000),
+(40, 40, 1, 0.0000, 'R4', 12000.0000),
+(41, 41, 1, 0.0000, 'R4', 9600.0000),
+(42, 42, 1, 0.0000, 'R4', 6400.0000),
+(43, 43, 1, 100.0000, 'R4', 20000.0000),
+(44, 44, 1, 300.0000, 'R4', 7200.0000),
+(45, 45, 1, 0.0000, 'R4', 5600.0000),
+(46, 46, 1, 100.0000, 'R4', 8800.0000),
+(47, 47, 1, 100.0000, 'R4', 17600.0000),
+(48, 48, 1, 100.0000, 'R4', 6400.0000),
+(49, 49, 1, 100.0000, 'R4', 4000.0000),
+(50, 50, 1, 100.0000, 'R4', 3200.0000),
+(51, 44, 2, 0.0000, NULL, 7200.0000),
+(52, 45, 2, 0.0000, NULL, 5600.0000),
+(53, 38, 2, 0.0000, NULL, 16000.0000),
+(54, 39, 2, 0.0000, NULL, 8000.0000),
+(55, 40, 2, 0.0000, NULL, 12000.0000),
+(56, 41, 2, 0.0000, NULL, 9600.0000),
+(57, 42, 2, 0.0000, NULL, 6400.0000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_warehouses_products_variants`
+--
+
+DROP TABLE IF EXISTS `sma_warehouses_products_variants`;
+CREATE TABLE IF NOT EXISTS `sma_warehouses_products_variants` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `option_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `warehouse_id` int NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `rack` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `option_id` (`option_id`),
+  KEY `product_id` (`product_id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sma_warehouses_products_variants`
+--
+
+INSERT INTO `sma_warehouses_products_variants` (`id`, `option_id`, `product_id`, `warehouse_id`, `quantity`, `rack`) VALUES
+(1, 88, 44, 1, 300.0000, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sma_wishlist`
+--
+
+DROP TABLE IF EXISTS `sma_wishlist`;
+CREATE TABLE IF NOT EXISTS `sma_wishlist` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sms_settings`
+--
+
+DROP TABLE IF EXISTS `sms_settings`;
+CREATE TABLE IF NOT EXISTS `sms_settings` (
+  `id` int NOT NULL,
+  `auto_send` tinyint(1) NOT NULL DEFAULT '0',
+  `config` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `sms_settings`
+--
+
+INSERT INTO `sms_settings` (`id`, `auto_send`, `config`) VALUES
+(1, 0, '{\"gateway\":\"Log\"}');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `settings`
+--
+DROP TABLE IF EXISTS `settings`;
+
+DROP VIEW IF EXISTS `settings`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `settings`  AS SELECT `sma_settings`.`setting_id` AS `setting_id`, `sma_settings`.`logo` AS `logo`, `sma_settings`.`logo2` AS `logo2`, `sma_settings`.`site_name` AS `site_name`, `sma_settings`.`language` AS `language`, `sma_settings`.`default_warehouse` AS `default_warehouse`, `sma_settings`.`accounting_method` AS `accounting_method`, `sma_settings`.`default_currency` AS `default_currency`, `sma_settings`.`default_tax_rate` AS `default_tax_rate`, `sma_settings`.`rows_per_page` AS `rows_per_page`, `sma_settings`.`version` AS `version`, `sma_settings`.`default_tax_rate2` AS `default_tax_rate2`, `sma_settings`.`dateformat` AS `dateformat`, `sma_settings`.`sales_prefix` AS `sales_prefix`, `sma_settings`.`quote_prefix` AS `quote_prefix`, `sma_settings`.`purchase_prefix` AS `purchase_prefix`, `sma_settings`.`transfer_prefix` AS `transfer_prefix`, `sma_settings`.`delivery_prefix` AS `delivery_prefix`, `sma_settings`.`payment_prefix` AS `payment_prefix`, `sma_settings`.`return_prefix` AS `return_prefix`, `sma_settings`.`returnp_prefix` AS `returnp_prefix`, `sma_settings`.`expense_prefix` AS `expense_prefix`, `sma_settings`.`item_addition` AS `item_addition`, `sma_settings`.`theme` AS `theme`, `sma_settings`.`product_serial` AS `product_serial`, `sma_settings`.`default_discount` AS `default_discount`, `sma_settings`.`product_discount` AS `product_discount`, `sma_settings`.`discount_method` AS `discount_method`, `sma_settings`.`tax1` AS `tax1`, `sma_settings`.`tax2` AS `tax2`, `sma_settings`.`overselling` AS `overselling`, `sma_settings`.`restrict_user` AS `restrict_user`, `sma_settings`.`restrict_calendar` AS `restrict_calendar`, `sma_settings`.`timezone` AS `timezone`, `sma_settings`.`iwidth` AS `iwidth`, `sma_settings`.`iheight` AS `iheight`, `sma_settings`.`twidth` AS `twidth`, `sma_settings`.`theight` AS `theight`, `sma_settings`.`watermark` AS `watermark`, `sma_settings`.`reg_ver` AS `reg_ver`, `sma_settings`.`allow_reg` AS `allow_reg`, `sma_settings`.`reg_notification` AS `reg_notification`, `sma_settings`.`auto_reg` AS `auto_reg`, `sma_settings`.`protocol` AS `protocol`, `sma_settings`.`mailpath` AS `mailpath`, `sma_settings`.`smtp_host` AS `smtp_host`, `sma_settings`.`smtp_user` AS `smtp_user`, `sma_settings`.`smtp_pass` AS `smtp_pass`, `sma_settings`.`smtp_port` AS `smtp_port`, `sma_settings`.`smtp_crypto` AS `smtp_crypto`, `sma_settings`.`corn` AS `corn`, `sma_settings`.`customer_group` AS `customer_group`, `sma_settings`.`default_email` AS `default_email`, `sma_settings`.`mmode` AS `mmode`, `sma_settings`.`bc_fix` AS `bc_fix`, `sma_settings`.`auto_detect_barcode` AS `auto_detect_barcode`, `sma_settings`.`captcha` AS `captcha`, `sma_settings`.`reference_format` AS `reference_format`, `sma_settings`.`racks` AS `racks`, `sma_settings`.`attributes` AS `attributes`, `sma_settings`.`product_expiry` AS `product_expiry`, `sma_settings`.`decimals` AS `decimals`, `sma_settings`.`qty_decimals` AS `qty_decimals`, `sma_settings`.`decimals_sep` AS `decimals_sep`, `sma_settings`.`thousands_sep` AS `thousands_sep`, `sma_settings`.`invoice_view` AS `invoice_view`, `sma_settings`.`default_biller` AS `default_biller`, `sma_settings`.`envato_username` AS `envato_username`, `sma_settings`.`purchase_code` AS `purchase_code`, `sma_settings`.`rtl` AS `rtl`, `sma_settings`.`each_spent` AS `each_spent`, `sma_settings`.`ca_point` AS `ca_point`, `sma_settings`.`each_sale` AS `each_sale`, `sma_settings`.`sa_point` AS `sa_point`, `sma_settings`.`update` AS `update`, `sma_settings`.`sac` AS `sac`, `sma_settings`.`display_all_products` AS `display_all_products`, `sma_settings`.`display_symbol` AS `display_symbol`, `sma_settings`.`symbol` AS `symbol`, `sma_settings`.`remove_expired` AS `remove_expired`, `sma_settings`.`barcode_separator` AS `barcode_separator`, `sma_settings`.`set_focus` AS `set_focus`, `sma_settings`.`price_group` AS `price_group`, `sma_settings`.`barcode_img` AS `barcode_img`, `sma_settings`.`ppayment_prefix` AS `ppayment_prefix`, `sma_settings`.`disable_editing` AS `disable_editing`, `sma_settings`.`qa_prefix` AS `qa_prefix`, `sma_settings`.`update_cost` AS `update_cost`, `sma_settings`.`apis` AS `apis`, `sma_settings`.`state` AS `state`, `sma_settings`.`pdf_lib` AS `pdf_lib`, `sma_settings`.`use_code_for_slug` AS `use_code_for_slug`, `sma_settings`.`ws_barcode_type` AS `ws_barcode_type`, `sma_settings`.`ws_barcode_chars` AS `ws_barcode_chars`, `sma_settings`.`flag_chars` AS `flag_chars`, `sma_settings`.`item_code_start` AS `item_code_start`, `sma_settings`.`item_code_chars` AS `item_code_chars`, `sma_settings`.`price_start` AS `price_start`, `sma_settings`.`price_chars` AS `price_chars`, `sma_settings`.`price_divide_by` AS `price_divide_by`, `sma_settings`.`weight_start` AS `weight_start`, `sma_settings`.`weight_chars` AS `weight_chars`, `sma_settings`.`weight_divide_by` AS `weight_divide_by`, `sma_settings`.`ksa_qrcode` AS `ksa_qrcode` FROM `sma_settings` ;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

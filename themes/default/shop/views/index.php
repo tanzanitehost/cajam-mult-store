@@ -25,7 +25,25 @@
             if (!empty($slide->link)) {
                 echo '<a href="' . $slide->link . '">';
             }
-            echo '<img src="' . base_url('assets/uploads/' . $slide->image) . '" alt="">';
+            // Build responsive srcset if common resized variants exist
+            $img_rel = 'assets/uploads/' . $slide->image;
+            $img_abs = FCPATH . $img_rel;
+            $src = base_url($img_rel);
+            $srcsetParts = [];
+            // Try common widths (adjust if you have a different thumbnail pipeline)
+            $sizesToTry = [320, 640, 1024, 1600, 2000];
+            $pathinfo = pathinfo($img_abs);
+            if (!empty($pathinfo['dirname']) && !empty($pathinfo['filename']) && !empty($pathinfo['extension'])) {
+                foreach ($sizesToTry as $w) {
+                    $candidate_abs = $pathinfo['dirname'] . DIRECTORY_SEPARATOR . $pathinfo['filename'] . '-' . $w . '.' . $pathinfo['extension'];
+                    $candidate_rel = str_replace(FCPATH, '', $candidate_abs);
+                    if (file_exists($candidate_abs)) {
+                        $srcsetParts[] = base_url($candidate_rel) . ' ' . $w . 'w';
+                    }
+                }
+            }
+            $srcsetAttr = !empty($srcsetParts) ? ' srcset="' . implode(', ', $srcsetParts) . '" sizes="100vw"' : '';
+            echo '<img src="' . $src . '"' . $srcsetAttr . ' alt="">';
             if (!empty($slide->caption)) {
                 echo '<div class="carousel-caption">' . $slide->caption . '</div>';
             }

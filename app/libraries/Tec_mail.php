@@ -3,9 +3,10 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 /*
 *  ==============================================================================
-*  Author   : Mian Saleem
-*  Email    : saleem@tecdiary.com
-*  Web      : http://tecdiary.com
+*  Product   : Cajam-mult-store
+*  Developer : Wolinet Technology
+*  Author    : Renatus Bernardo
+*  Notes     : Email sending wrapper (PHPMailer) — forked and customized
 *  ==============================================================================
 */
 

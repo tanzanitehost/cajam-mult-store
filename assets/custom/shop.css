@@ -1,39 +1,59 @@
 /* Custom Shop Styles */
 
 /* Slider CSS */
-.slider-container { padding-top: 0; padding-bottom: 0; margin-bottom: 10px; }
-.slider-container .carousel-inner {
-    max-height: 120px; /* Even more minimal height */
-    min-height: 70px;
-    overflow: hidden;
-}
-.slider-container .carousel-inner > .item > img {
-    width: 100%;
-    height: auto;
-    max-height: 120px;
-    min-height: 70px;
-    object-fit: contain;
-    margin: 0 auto;
+.slider-container { padding-top: 0; padding-bottom: 0; margin-bottom: 10px; background: #fff; }
+/* Full-bleed slider: break out of any parent padding */
+.slider-container { width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; overflow: hidden; }
+.slider-container .container-fluid { padding-left: 0; padding-right: 0; }
+.slider-container .row { margin-left: 0; margin-right: 0; }
+.slider-container .carousel { width: 100vw; overflow: hidden; }
+.slider-container .carousel-inner { width: 100%; }
+.slider-container .carousel-inner > .item { width: 100%; }
+.slider-container .carousel-control { width: 5%; }
+.slider-container .left.carousel-control,
+.slider-container .right.carousel-control { background: transparent !important; }
+.slider-container .carousel,
+.slider-container .carousel-inner,
+.slider-container .carousel-inner > .item { background: transparent !important; }
+
+/* Compact, previous heights */
+.slider-container .carousel-inner { height: 120px; overflow: hidden; }
+.slider-container .carousel-inner > .item { height: 120px; display: flex; align-items: center; justify-content: center; }
+.slider-container .carousel-inner > .item > img,
+.slider-container .carousel-inner > .item a > img {
+    height: 100%;           /* fill slide height */
+    width: 100%;            /* follow container width to avoid fractional vw rounding */
+    max-width: none;        /* allow scaling beyond intrinsic */
+    object-fit: cover;      /* cover area without letterboxing */
+    object-position: center center; /* center the subject */
+    image-rendering: auto;
+    margin: 0;              /* no side gaps */
     display: block;
-    padding: 0;
 }
 .slider-container .carousel-indicators { margin-bottom: 0; }
 .slider-container .carousel-caption { font-size: 1em; padding: 2px 8px; background: rgba(255,255,255,0.7); color: #222; border-radius: 4px; }
 @media (max-width: 992px) {
-    .slider-container .carousel-inner,
-    .slider-container .carousel-inner > .item > img {
-        max-height: 90px;
-        min-height: 50px;
-    }
+    .slider-container .carousel-inner { height: 90px; }
+    .slider-container .carousel-inner > .item { height: 90px; }
 }
 @media (max-width: 767px) {
-    .slider-container .carousel-inner,
-    .slider-container .carousel-inner > .item > img {
-        max-height: 60px;
-        min-height: 35px;
-    }
+    .slider-container .carousel-inner { height: 60px; }
+    .slider-container .carousel-inner > .item { height: 60px; }
     .slider-container .carousel-caption { font-size: 0.85em; padding: 1px 5px; }
 }
+
+/* Prevent wrapper blue background from affecting slider only */
+#wrapper.blue .slider-container,
+#wrapper.blue .slider-container .carousel,
+#wrapper.blue .slider-container .carousel-inner,
+#wrapper.blue .slider-container .carousel-inner > .item { background: transparent !important; }
+
+/* Remove global blue background entirely if present */
+#wrapper.blue { background: #fff !important; background-image: none !important; }
+#wrapper.blue:before, #wrapper.blue:after { background: transparent !important; }
+
+/* Remove any gradient overlays on controls */
+.slider-container .carousel-control { background-image: none !important; box-shadow: none !important; }
 
 
 /* ------------------------------------------------------------------

@@ -211,7 +211,7 @@ $config['directory_trigger']    = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -437,7 +437,7 @@ $config['csrf_protection']   = true;
 $config['csrf_token_name']   = 'token';
 $config['csrf_cookie_name']  = 'token_cookie';
 $config['csrf_expire']       = 7200;
-$config['csrf_regenerate']   = true;
+$config['csrf_regenerate']   = false;
 $config['csrf_exclude_uris'] = ['pay/[a-z]+', 'admin/welcome/image_upload'];
 
 /*

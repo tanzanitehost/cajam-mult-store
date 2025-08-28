@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <base href="<?= site_url() ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Wolinet Technology — Author: Renatus Bernardo">
+    <meta name="application-name" content="Cajam-mult-store">
     <title><?= $page_title ?> - <?= $Settings->site_name ?></title>
     <link rel="shortcut icon" href="<?= $assets ?>images/icon.png"/>
     <link href="<?= $assets ?>styles/theme.css" rel="stylesheet"/>
@@ -767,7 +769,85 @@
                                     </ul>
                                 </li>
                                 <?php
-                            } ?>
+                            } else { ?>
+                                <?php
+                                // Non-owner settings menu based on permissions
+                                $can_cats   = $this->sma->actionPermissions('index', 'categories');
+                                $can_units  = $this->sma->actionPermissions('index', 'units');
+                                $can_brands = $this->sma->actionPermissions('index', 'brands');
+                                $can_vars   = $this->sma->actionPermissions('index', 'variants');
+                                $can_tax    = $this->sma->actionPermissions('index', 'tax_rates');
+                                $can_wh     = $this->sma->actionPermissions('index', 'warehouses');
+                                $can_cg     = $this->sma->actionPermissions('index', 'customer_groups');
+                                $can_pg     = $this->sma->actionPermissions('index', 'price_groups');
+                                if ($can_cats || $can_units || $can_brands || $can_vars || $can_tax || $can_wh || $can_cg || $can_pg) { ?>
+                                <li class="mm_system_settings">
+                                    <a class="dropmenu" href="#">
+                                        <i class="fa fa-cog"></i><span class="text"> <?= lang('settings'); ?> </span>
+                                        <span class="chevron closed"></span>
+                                    </a>
+                                    <ul>
+                                        <?php if ($can_cg) { ?>
+                                        <li id="system_settings_customer_groups">
+                                            <a href="<?= admin_url('system_settings/customer_groups') ?>">
+                                                <i class="fa fa-chain"></i><span class="text"> <?= lang('customer_groups'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_pg) { ?>
+                                        <li id="system_settings_price_groups">
+                                            <a href="<?= admin_url('system_settings/price_groups') ?>">
+                                                <i class="fa fa-dollar"></i><span class="text"> <?= lang('price_groups'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_cats) { ?>
+                                        <li id="system_settings_categories">
+                                            <a href="<?= admin_url('system_settings/categories') ?>">
+                                                <i class="fa fa-folder-open"></i><span class="text"> <?= lang('categories'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_units) { ?>
+                                        <li id="system_settings_units">
+                                            <a href="<?= admin_url('system_settings/units') ?>">
+                                                <i class="fa fa-wrench"></i><span class="text"> <?= lang('units'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_brands) { ?>
+                                        <li id="system_settings_brands">
+                                            <a href="<?= admin_url('system_settings/brands') ?>">
+                                                <i class="fa fa-th-list"></i><span class="text"> <?= lang('brands'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                    
+                                        <?php if ($can_vars) { ?>
+                                        <li id="system_settings_variants">
+                                            <a href="<?= admin_url('system_settings/variants') ?>">
+                                                <i class="fa fa-tags"></i><span class="text"> <?= lang('variants'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_tax) { ?>
+                                        <li id="system_settings_tax_rates">
+                                            <a href="<?= admin_url('system_settings/tax_rates') ?>">
+                                                <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('tax_rates'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_wh) { ?>
+                                        <li id="system_settings_warehouses">
+                                            <a href="<?= admin_url('system_settings/warehouses') ?>">
+                                                <i class="fa fa-building-o"></i><span class="text"> <?= lang('warehouses'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
+                                <?php } ?>
+                            <?php } ?>
                             <li class="mm_reports">
                                 <a class="dropmenu" href="#">
                                     <i class="fa fa-bar-chart-o"></i>
@@ -900,7 +980,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <?php if ($Owner && file_exists(APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'shop' . DIRECTORY_SEPARATOR . 'Shop.php')) {
+                            <?php if (($Owner || $Admin) && file_exists(APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'shop' . DIRECTORY_SEPARATOR . 'Shop.php')) {
                                 ?>
                             <li class="mm_shop_settings mm_api_settings">
                                 <a class="dropmenu" href="#">
@@ -908,16 +988,20 @@
                                     <span class="chevron closed"></span>
                                 </a>
                                 <ul>
+                                    <?php if ($Owner) { ?>
                                     <li id="shop_settings_index">
                                         <a href="<?= admin_url('shop_settings') ?>">
                                             <i class="fa fa-cog"></i><span class="text"> <?= lang('shop_settings'); ?></span>
                                         </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if ($this->sma->actionPermissions('edit', 'slider')) { ?>
                                     <li id="shop_settings_slider">
                                         <a href="<?= admin_url('shop_settings/slider') ?>">
                                             <i class="fa fa-file"></i><span class="text"> <?= lang('slider_settings'); ?></span>
                                         </a>
                                     </li>
+                                    <?php } ?>
                                     <?php if ($Settings->apis) {
                                         ?>
                                     <li id="api_settings_index">
@@ -927,16 +1011,21 @@
                                     </li>
                                         <?php
                                     } ?>
+                                    <?php if ($this->sma->actionPermissions('index', 'pages')) { ?>
                                     <li id="shop_settings_pages">
                                         <a href="<?= admin_url('shop_settings/pages') ?>">
                                             <i class="fa fa-file"></i><span class="text"> <?= lang('list_pages'); ?></span>
                                         </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if ($this->sma->actionPermissions('add', 'pages')) { ?>
                                     <li id="shop_settings_pages">
                                         <a href="<?= admin_url('shop_settings/add_page') ?>">
                                             <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_page'); ?></span>
                                         </a>
                                     </li>
+                                    <?php } ?>
+                                    <?php if ($Owner) { ?>
                                     <li id="shop_settings_sms_settings">
                                         <a href="<?= admin_url('shop_settings/sms_settings') ?>">
                                             <i class="fa fa-cogs"></i><span class="text"> <?= lang('sms_settings'); ?></span>
@@ -952,6 +1041,7 @@
                                             <i class="fa fa-file-text-o"></i><span class="text"> <?= lang('sms_log'); ?></span>
                                         </a>
                                     </li>
+                                    <?php } ?>
                                 </ul>
                             </li>
                                 <?php
@@ -1023,6 +1113,45 @@
                                 </ul>
                             </li>
                                 <?php
+                            } ?>
+
+                            <?php
+                            // Front End menu for non-owner users with permissions
+                            if (file_exists(APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'shop' . DIRECTORY_SEPARATOR . 'Shop.php')) {
+                                $can_pages_index = $this->sma->actionPermissions('index', 'pages');
+                                $can_pages_add   = $this->sma->actionPermissions('add', 'pages');
+                                $can_slider_edit = $this->sma->actionPermissions('edit', 'slider');
+                                if ($can_pages_index || $can_pages_add || $can_slider_edit) { ?>
+                                <li class="mm_shop_settings mm_api_settings">
+                                    <a class="dropmenu" href="#">
+                                        <i class="fa fa-shopping-cart"></i><span class="text"> <?= lang('front_end'); ?> </span>
+                                        <span class="chevron closed"></span>
+                                    </a>
+                                    <ul>
+                                        <?php if ($can_slider_edit) { ?>
+                                        <li id="shop_settings_slider">
+                                            <a href="<?= admin_url('shop_settings/slider') ?>">
+                                                <i class="fa fa-file"></i><span class="text"> <?= lang('slider_settings'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_pages_index) { ?>
+                                        <li id="shop_settings_pages">
+                                            <a href="<?= admin_url('shop_settings/pages') ?>">
+                                                <i class="fa fa-file"></i><span class="text"> <?= lang('list_pages'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if ($can_pages_add) { ?>
+                                        <li id="shop_settings_pages">
+                                            <a href="<?= admin_url('shop_settings/add_page') ?>">
+                                                <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_page'); ?></span>
+                                            </a>
+                                        </li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
+                                <?php }
                             } ?>
 
                             <?php if ($GP['sales-index'] || $GP['sales-add'] || $GP['sales-deliveries'] || $GP['sales-gift_cards']) {

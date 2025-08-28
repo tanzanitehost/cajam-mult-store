@@ -4,14 +4,23 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="text/javascript">if (parent.frames.length !== 0) { top.location = '<?= site_url(); ?>'; }</script>
-    <title><?= $page_title; ?></title>
-    <meta name="description" content="<?= $page_desc; ?>">
-    <link rel="shortcut icon" href="<?= $assets; ?>images/icon.png">
-    <link href="<?= $assets; ?>css/libs.min.css" rel="stylesheet">
-    <link href="<?= $assets; ?>css/styles.min.css" rel="stylesheet">
-    <link href="<?= base_url('assets/custom/shop.css') ?>" rel="stylesheet"/>
-    <style>
+  <script type="text/javascript">if (parent.frames.length !== 0) { top.location = '<?= site_url(); ?>'; }</script>
+  <title><?= $page_title; ?></title>
+  <meta name="description" content="<?= $page_desc; ?>">
+  <meta name="author" content="Wolinet Technology — Author: Renatus Bernardo">
+  <meta name="application-name" content="Cajam-mult-store">
+  <!-- CAJAM Icons & PWA -->
+  <link rel="manifest" href="<?= base_url('assets/icons/site.webmanifest'); ?>">
+  <meta name="theme-color" content="#5b2a4a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Cajam-mult-store">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/icon-192.png'); ?>">
+  <meta name="msapplication-config" content="<?= base_url('assets/icons/browserconfig.xml'); ?>">
+  <link rel="shortcut icon" href="<?= $assets; ?>images/icon.png">
+  <link href="<?= $assets; ?>css/libs.min.css" rel="stylesheet">
+  <link href="<?= $assets; ?>css/styles.min.css" rel="stylesheet">
+  <link href="<?= base_url('assets/custom/shop.css') ?>" rel="stylesheet"/>
+  <style>
         /* Branding: Purple (#5b2a4a) and Green (#68b96e) with safe contrast */
         /* Page titles */
         .page-contents h1,
@@ -41,7 +50,14 @@
         .dropdown-menu > li > a:hover,
         .dropdown-menu > li > a:focus { background-color: #5b2a4a; color: #ffffff; }
         .dropdown-menu .divider { background-color: #68b96e; }
-    </style>
+
+        /* Themed action buttons */
+        .btn-theme { background-color: #5b2a4a; border-color: #5b2a4a; color: #fff; }
+        .btn-theme:hover, .btn-theme:focus { background-color: #4a223c; border-color: #4a223c; color: #fff; }
+
+        /* Header accent under logo */
+        .main-header { border-bottom: 3px solid #68b96e; }
+  </style>
     <meta property="og:url" content="<?= isset($product) && !empty($product) ? site_url('product/' . $product->slug) : site_url(); ?>" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?= $page_title; ?>" />
@@ -49,7 +65,7 @@
     <meta property="og:image" content="<?= isset($product) && !empty($product) ? base_url('assets/uploads/' . $product->image) : base_url('assets/uploads/logos/' . $shop_settings->logo); ?>" />
 </head>
 <body>
-    <section id="wrapper" class="blue">
+    <section id="wrapper">
         <header>
             <!-- Top Header -->
             <section class="top-header">
@@ -69,7 +85,7 @@
                             <ul class="list-inline nav pull-right">
                                 <?php
                                 if (DEMO) {
-                                    echo '<li class="hidden-xs hidden-sm"><a href="https://codecanyon.net/item/stock-manager-advance-with-all-modules/23045302?ref=Tecdiary" class="green" target="_blank"><i class="fa fa-shopping-cart"></i> Buy Now!</a></li>';
+                                    // Removed legacy external purchase link
                                     echo '<li class="hidden-xs hidden-sm"><a href="' . admin_url() . '" class="green" target="_blank"><i class="fa fa-user"></i> Admin demo</a></li>';
                                 }
                                 ?>

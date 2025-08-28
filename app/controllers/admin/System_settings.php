@@ -12,10 +12,94 @@ class system_settings extends MY_Controller
             $this->session->set_userdata('requested_page', $this->uri->uri_string());
             $this->sma->md('login');
         }
-
+        // Owner has full access; others are permission-gated per method below
         if (!$this->Owner) {
-            $this->session->set_flashdata('warning', lang('access_denied'));
-            redirect('admin');
+            // Map methods to permission module/action pairs
+            $method = strtolower($this->router->fetch_method());
+            $permMap = [
+                // Brands
+                'brands'        => ['brands', 'index'],
+                'add_brand'     => ['brands', 'add'],
+                'edit_brand'    => ['brands', 'edit'],
+                'delete_brand'  => ['brands', 'delete'],
+                'brand_actions' => ['brands', 'index'],
+                'getbrands'     => ['brands', 'index'],
+                // Categories
+                'categories'        => ['categories', 'index'],
+                'add_category'      => ['categories', 'add'],
+                'edit_category'     => ['categories', 'edit'],
+                'delete_category'   => ['categories', 'delete'],
+                'category_actions'  => ['categories', 'index'],
+                'getcategories'     => ['categories', 'index'],
+                // Units
+                'units'        => ['units', 'index'],
+                'add_unit'     => ['units', 'add'],
+                'edit_unit'    => ['units', 'edit'],
+                'delete_unit'  => ['units', 'delete'],
+                'getunits'     => ['units', 'index'],
+                // Variants
+                'variants'        => ['variants', 'index'],
+                'add_variant'     => ['variants', 'add'],
+                'edit_variant'    => ['variants', 'edit'],
+                'delete_variant'  => ['variants', 'delete'],
+                'getvariants'     => ['variants', 'index'],
+                // Tax Rates
+                'tax_rates'        => ['tax_rates', 'index'],
+                'add_tax_rate'     => ['tax_rates', 'add'],
+                'edit_tax_rate'    => ['tax_rates', 'edit'],
+                'delete_tax_rate'  => ['tax_rates', 'delete'],
+                'gettaxrates'      => ['tax_rates', 'index'],
+                // Warehouses
+                'warehouses'        => ['warehouses', 'index'],
+                'add_warehouse'     => ['warehouses', 'add'],
+                'edit_warehouse'    => ['warehouses', 'edit'],
+                'delete_warehouse'  => ['warehouses', 'delete'],
+                'getwarehouses'     => ['warehouses', 'index'],
+                // Customer Groups
+                'customer_groups'        => ['customer_groups', 'index'],
+                'add_customer_group'     => ['customer_groups', 'add'],
+                'edit_customer_group'    => ['customer_groups', 'edit'],
+                'delete_customer_group'  => ['customer_groups', 'delete'],
+                'getcustomergroups'      => ['customer_groups', 'index'],
+                // Price Groups
+                'price_groups'        => ['price_groups', 'index'],
+                'add_price_group'     => ['price_groups', 'add'],
+                'edit_price_group'    => ['price_groups', 'edit'],
+                'delete_price_group'  => ['price_groups', 'delete'],
+                'getpricegroups'       => ['price_groups', 'index'],
+                'group_product_prices' => ['price_groups', 'index'],
+                // Currencies
+                'currencies'        => ['currencies', 'index'],
+                'add_currency'      => ['currencies', 'add'],
+                'edit_currency'     => ['currencies', 'edit'],
+                'delete_currency'   => ['currencies', 'delete'],
+                'getcurrencies'     => ['currencies', 'index'],
+                // Expense Categories
+                'expense_categories'      => ['expense_categories', 'index'],
+                'add_expense_category'    => ['expense_categories', 'add'],
+                'edit_expense_category'   => ['expense_categories', 'edit'],
+                'delete_expense_category' => ['expense_categories', 'delete'],
+                'getexpensecategories'    => ['expense_categories', 'index'],
+            ];
+
+            // Methods that remain owner-only for safety
+            $ownerOnly = [
+                'index', 'change_logo', 'backups', 'site_logs', 'email_templates', 'updates',
+            ];
+
+            if (in_array($method, $ownerOnly, true)) {
+                $this->session->set_flashdata('warning', lang('access_denied'));
+                redirect('admin');
+            }
+
+            if (isset($permMap[$method])) {
+                [$module, $action] = $permMap[$method];
+                if (!$this->sma->actionPermissions($action, $module)) {
+                    $this->session->set_flashdata('warning', lang('access_denied'));
+                    // Send user back to the relevant settings section instead of home
+                    admin_redirect('system_settings/' . $module);
+                }
+            } // else allow through for methods not explicitly mapped
         }
         $this->lang->admin_load('settings', $this->Settings->user_language);
         $this->load->library('form_validation');
@@ -538,10 +622,70 @@ class system_settings extends MY_Controller
                     $filename = 'brands_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    $brands = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($b = $this->site->getBrandByID($id)) {
+                                $brands[] = $b;
+                            }
+                        }
+                    } else {
+                        $brands = $this->site->getAllBrands();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('brands') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('image') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($brands)) {
+                        foreach ($brands as $brand) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($brand->name) . '</td>'
+                                . '<td>' . htmlspecialchars($brand->code) . '</td>'
+                                . '<td>' . htmlspecialchars($brand->image) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'brands_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
-                $this->session->set_flashdata('error', lang('no_record_selected'));
-                redirect($_SERVER['HTTP_REFERER']);
+                // If export_pdf with no selection, export all
+                if ($this->input->post('form_action') == 'export_pdf') {
+                    $brands = $this->site->getAllBrands();
+
+                    $html  = '<h3 style="text-align:center;">' . lang('brands') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('image') . '</th>'
+                        . '</tr></thead><tbody>';
+                    foreach ($brands as $brand) {
+                        $html .= '<tr>'
+                            . '<td>' . htmlspecialchars($brand->name) . '</td>'
+                            . '<td>' . htmlspecialchars($brand->code) . '</td>'
+                            . '<td>' . htmlspecialchars($brand->image) . '</td>'
+                            . '</tr>';
+                    }
+                    $html .= '</tbody></table>';
+                    $this->load->library('tec_mpdf');
+                    $filename = 'brands_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
+                } else {
+                    $this->session->set_flashdata('error', lang('no_record_selected'));
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
@@ -570,32 +714,52 @@ class system_settings extends MY_Controller
         $this->form_validation->set_rules('form_action', lang('form_action'), 'required');
 
         if ($this->form_validation->run() == true) {
-            if (!empty($_POST['val'])) {
-                if ($this->input->post('form_action') == 'delete') {
-                    foreach ($_POST['val'] as $id) {
+            $action = $this->input->post('form_action');
+            $selected = $this->input->post('val');
+
+            if ($action == 'delete') {
+                if (!empty($selected)) {
+                    foreach ($selected as $id) {
                         $this->settings_model->deleteCategory($id);
                     }
                     $this->session->set_flashdata('message', lang('categories_deleted'));
-                    redirect($_SERVER['HTTP_REFERER']);
+                } else {
+                    $this->session->set_flashdata('error', lang('no_record_selected'));
+                }
+                admin_redirect('system_settings/categories');
+            }
+
+            if ($action == 'export_excel') {
+                $this->load->library('excel');
+                $this->excel->setActiveSheetIndex(0);
+                $this->excel->getActiveSheet()->setTitle(lang('categories'));
+                $this->excel->getActiveSheet()->SetCellValue('A1', lang('code'));
+                $this->excel->getActiveSheet()->SetCellValue('B1', lang('name'));
+                $this->excel->getActiveSheet()->SetCellValue('C1', lang('slug'));
+                $this->excel->getActiveSheet()->SetCellValue('D1', lang('image'));
+                $this->excel->getActiveSheet()->SetCellValue('E1', lang('parent_category'));
+
+                // Gather categories: selected ones, or all if none selected
+                $categories = [];
+                if (!empty($selected)) {
+                    foreach ($selected as $id) {
+                        if ($sc = $this->settings_model->getCategoryByID($id)) {
+                            $categories[] = $sc;
+                        }
+                    }
+                } else {
+                    // Fallback: export all categories
+                    $categories = $this->settings_model->getAllCategories();
                 }
 
-                if ($this->input->post('form_action') == 'export_excel') {
-                    $this->load->library('excel');
-                    $this->excel->setActiveSheetIndex(0);
-                    $this->excel->getActiveSheet()->setTitle(lang('categories'));
-                    $this->excel->getActiveSheet()->SetCellValue('A1', lang('code'));
-                    $this->excel->getActiveSheet()->SetCellValue('B1', lang('name'));
-                    $this->excel->getActiveSheet()->SetCellValue('C1', lang('slug'));
-                    $this->excel->getActiveSheet()->SetCellValue('D1', lang('image'));
-                    $this->excel->getActiveSheet()->SetCellValue('E1', lang('parent_category'));
-
-                    $row = 2;
-                    foreach ($_POST['val'] as $id) {
-                        $sc              = $this->settings_model->getCategoryByID($id);
+                $row = 2;
+                if (!empty($categories)) {
+                    foreach ($categories as $sc) {
                         $parent_category = '';
-                        if ($sc->parent_id) {
-                            $pc              = $this->settings_model->getCategoryByID($sc->parent_id);
-                            $parent_category = $pc->code;
+                        if (!empty($sc->parent_id)) {
+                            if ($pc = $this->settings_model->getCategoryByID($sc->parent_id)) {
+                                $parent_category = $pc->code;
+                            }
                         }
                         $this->excel->getActiveSheet()->SetCellValue('A' . $row, $sc->code);
                         $this->excel->getActiveSheet()->SetCellValue('B' . $row, $sc->name);
@@ -604,21 +768,68 @@ class system_settings extends MY_Controller
                         $this->excel->getActiveSheet()->SetCellValue('E' . $row, $parent_category);
                         $row++;
                     }
-
-                    $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-                    $this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-                    $this->excel->getDefaultStyle()->getAlignment()->setVertical('center');
-                    $filename = 'categories_' . date('Y_m_d_H_i_s');
-                    $this->load->helper('excel');
-                    create_excel($this->excel, $filename);
                 }
-            } else {
-                $this->session->set_flashdata('error', lang('no_record_selected'));
-                redirect($_SERVER['HTTP_REFERER']);
+
+                $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+                $this->excel->getDefaultStyle()->getAlignment()->setVertical('center');
+                $filename = 'categories_' . date('Y_m_d_H_i_s');
+                $this->load->helper('excel');
+                create_excel($this->excel, $filename);
+            }
+
+            if ($action == 'export_pdf') {
+                // Gather categories: selected ones, or all if none selected
+                $categories = [];
+                if (!empty($selected)) {
+                    foreach ($selected as $id) {
+                        if ($sc = $this->settings_model->getCategoryByID($id)) {
+                            $categories[] = $sc;
+                        }
+                    }
+                } else {
+                    $categories = $this->settings_model->getAllCategories();
+                }
+
+                // Build simple HTML table for PDF
+                $html  = '<h3 style="text-align:center;">' . lang('categories') . '</h3>';
+                $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                $html .= '<thead><tr>'
+                    . '<th>' . lang('code') . '</th>'
+                    . '<th>' . lang('name') . '</th>'
+                    . '<th>' . lang('slug') . '</th>'
+                    . '<th>' . lang('image') . '</th>'
+                    . '<th>' . lang('parent_category') . '</th>'
+                    . '</tr></thead><tbody>';
+
+                if (!empty($categories)) {
+                    foreach ($categories as $sc) {
+                        $parent_category = '';
+                        if (!empty($sc->parent_id)) {
+                            if ($pc = $this->settings_model->getCategoryByID($sc->parent_id)) {
+                                $parent_category = $pc->code;
+                            }
+                        }
+                        $html .= '<tr>'
+                            . '<td>' . htmlspecialchars($sc->code) . '</td>'
+                            . '<td>' . htmlspecialchars($sc->name) . '</td>'
+                            . '<td>' . htmlspecialchars($sc->slug) . '</td>'
+                            . '<td>' . htmlspecialchars($sc->image) . '</td>'
+                            . '<td>' . htmlspecialchars($parent_category) . '</td>'
+                            . '</tr>';
+                    }
+                }
+
+                $html .= '</tbody></table>';
+
+                $this->load->library('tec_mpdf');
+                $filename = 'categories_' . date('Y_m_d_H_i_s') . '.pdf';
+                // Stream download
+                $this->tec_mpdf->generate($html, $filename, 'D');
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
-            redirect($_SERVER['HTTP_REFERER']);
+            admin_redirect('system_settings/categories');
         }
     }
 
@@ -785,10 +996,68 @@ class system_settings extends MY_Controller
                     $filename = 'currencies_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    $currencies = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($c = $this->settings_model->getCurrencyByID($id)) {
+                                $currencies[] = $c;
+                            }
+                        }
+                    } else {
+                        $currencies = $this->site->getAllCurrencies();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('currencies') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('rate') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($currencies)) {
+                        foreach ($currencies as $cur) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($cur->code) . '</td>'
+                                . '<td>' . htmlspecialchars($cur->name) . '</td>'
+                                . '<td>' . htmlspecialchars((string) $cur->rate) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'currencies_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
-                $this->session->set_flashdata('error', lang('no_record_selected'));
-                redirect($_SERVER['HTTP_REFERER']);
+                if ($this->input->post('form_action') == 'export_pdf') {
+                    $currencies = $this->site->getAllCurrencies();
+                    $html  = '<h3 style="text-align:center;">' . lang('currencies') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('rate') . '</th>'
+                        . '</tr></thead><tbody>';
+                    foreach ($currencies as $cur) {
+                        $html .= '<tr>'
+                            . '<td>' . htmlspecialchars($cur->code) . '</td>'
+                            . '<td>' . htmlspecialchars($cur->name) . '</td>'
+                            . '<td>' . htmlspecialchars((string) $cur->rate) . '</td>'
+                            . '</tr>';
+                    }
+                    $html .= '</tbody></table>';
+                    $this->load->library('tec_mpdf');
+                    $filename = 'currencies_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
+                } else {
+                    $this->session->set_flashdata('error', lang('no_record_selected'));
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
@@ -829,10 +1098,64 @@ class system_settings extends MY_Controller
                     $filename = 'customer_groups_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    $groups = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($g = $this->settings_model->getCustomerGroupByID($id)) {
+                                $groups[] = $g;
+                            }
+                        }
+                    } else {
+                        $groups = $this->db->get('customer_groups')->result();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('customer_groups') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('group_name') . '</th>'
+                        . '<th>' . lang('group_percentage') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($groups)) {
+                        foreach ($groups as $g) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($g->name) . '</td>'
+                                . '<td>' . htmlspecialchars((string) $g->percent) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'customer_groups_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
-                $this->session->set_flashdata('error', lang('no_customer_group_selected'));
-                redirect($_SERVER['HTTP_REFERER']);
+                if ($this->input->post('form_action') == 'export_pdf') {
+                    $groups = $this->db->get('customer_groups')->result();
+                    $html  = '<h3 style="text-align:center;">' . lang('customer_groups') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('group_name') . '</th>'
+                        . '<th>' . lang('group_percentage') . '</th>'
+                        . '</tr></thead><tbody>';
+                    foreach ($groups as $g) {
+                        $html .= '<tr>'
+                            . '<td>' . htmlspecialchars($g->name) . '</td>'
+                            . '<td>' . htmlspecialchars((string) $g->percent) . '</td>'
+                            . '</tr>';
+                    }
+                    $html .= '</tbody></table>';
+                    $this->load->library('tec_mpdf');
+                    $filename = 'customer_groups_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
+                } else {
+                    $this->session->set_flashdata('error', lang('no_customer_group_selected'));
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
@@ -1619,10 +1942,66 @@ class system_settings extends MY_Controller
                     $filename = 'expense_categories_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    // In this codebase, expense categories are stored in 'expense_categories'
+                    $categories = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            // Using direct query as there is no dedicated getter here
+                            if ($row = $this->db->get_where('expense_categories', ['id' => $id], 1)->row()) {
+                                $categories[] = $row;
+                            }
+                        }
+                    } else {
+                        $categories = $this->db->get('expense_categories')->result();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('expense_categories') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($categories)) {
+                        foreach ($categories as $ec) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($ec->code) . '</td>'
+                                . '<td>' . htmlspecialchars($ec->name) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'expense_categories_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
-                $this->session->set_flashdata('error', lang('no_record_selected'));
-                redirect($_SERVER['HTTP_REFERER']);
+                if ($this->input->post('form_action') == 'export_pdf') {
+                    $categories = $this->db->get('expense_categories')->result();
+                    $html  = '<h3 style="text-align:center;">' . lang('expense_categories') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '</tr></thead><tbody>';
+                    foreach ($categories as $ec) {
+                        $html .= '<tr>'
+                            . '<td>' . htmlspecialchars($ec->code) . '</td>'
+                            . '<td>' . htmlspecialchars($ec->name) . '</td>'
+                            . '</tr>';
+                    }
+                    $html .= '</tbody></table>';
+                    $this->load->library('tec_mpdf');
+                    $filename = 'expense_categories_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
+                } else {
+                    $this->session->set_flashdata('error', lang('no_record_selected'));
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
@@ -2418,6 +2797,74 @@ class system_settings extends MY_Controller
                 'reports-tax'                => $this->input->post('reports-tax'),
             ];
 
+            // Settings-related permissions
+            $data['categories-index']       = $this->input->post('categories-index');
+            $data['categories-add']         = $this->input->post('categories-add');
+            $data['categories-edit']        = $this->input->post('categories-edit');
+            $data['categories-delete']      = $this->input->post('categories-delete');
+
+            $data['brands-index']           = $this->input->post('brands-index');
+            $data['brands-add']             = $this->input->post('brands-add');
+            $data['brands-edit']            = $this->input->post('brands-edit');
+            $data['brands-delete']          = $this->input->post('brands-delete');
+
+            $data['customer_groups-index']  = $this->input->post('customer_groups-index');
+            $data['customer_groups-add']    = $this->input->post('customer_groups-add');
+            $data['customer_groups-edit']   = $this->input->post('customer_groups-edit');
+            $data['customer_groups-delete'] = $this->input->post('customer_groups-delete');
+
+            $data['price_groups-index']     = $this->input->post('price_groups-index');
+            $data['price_groups-add']       = $this->input->post('price_groups-add');
+            $data['price_groups-edit']      = $this->input->post('price_groups-edit');
+            $data['price_groups-delete']    = $this->input->post('price_groups-delete');
+
+            $data['tax_rates-index']        = $this->input->post('tax_rates-index');
+            $data['tax_rates-add']          = $this->input->post('tax_rates-add');
+            $data['tax_rates-edit']         = $this->input->post('tax_rates-edit');
+            $data['tax_rates-delete']       = $this->input->post('tax_rates-delete');
+
+            $data['units-index']            = $this->input->post('units-index');
+            $data['units-add']              = $this->input->post('units-add');
+            $data['units-edit']             = $this->input->post('units-edit');
+            $data['units-delete']           = $this->input->post('units-delete');
+
+            $data['variants-index']         = $this->input->post('variants-index');
+            $data['variants-add']           = $this->input->post('variants-add');
+            $data['variants-edit']          = $this->input->post('variants-edit');
+            $data['variants-delete']        = $this->input->post('variants-delete');
+
+            $data['warehouses-index']       = $this->input->post('warehouses-index');
+            $data['warehouses-add']         = $this->input->post('warehouses-add');
+            $data['warehouses-edit']        = $this->input->post('warehouses-edit');
+            $data['warehouses-delete']      = $this->input->post('warehouses-delete');
+
+            $data['groups-index']           = $this->input->post('groups-index');
+            $data['groups-add']             = $this->input->post('groups-add');
+            $data['groups-edit']            = $this->input->post('groups-edit');
+            $data['groups-delete']          = $this->input->post('groups-delete');
+
+            // Frontend settings permissions
+            $data['pages-index']            = $this->input->post('pages-index');
+            $data['pages-add']              = $this->input->post('pages-add');
+            $data['pages-edit']             = $this->input->post('pages-edit');
+            $data['pages-delete']           = $this->input->post('pages-delete');
+
+            $data['slider-index']           = $this->input->post('slider-index');
+            $data['slider-edit']            = $this->input->post('slider-edit');
+
+            $data['banners-index']          = $this->input->post('banners-index');
+            $data['banners-add']            = $this->input->post('banners-add');
+            $data['banners-edit']           = $this->input->post('banners-edit');
+            $data['banners-delete']         = $this->input->post('banners-delete');
+
+            $data['menus-index']            = $this->input->post('menus-index');
+            $data['menus-add']              = $this->input->post('menus-add');
+            $data['menus-edit']             = $this->input->post('menus-edit');
+            $data['menus-delete']           = $this->input->post('menus-delete');
+
+            $data['themes-index']           = $this->input->post('themes-index');
+            $data['themes-edit']            = $this->input->post('themes-edit');
+
             if (POS) {
                 $data['pos-index'] = $this->input->post('pos-index');
             }
@@ -2499,6 +2946,52 @@ class system_settings extends MY_Controller
                     $filename = 'price_groups_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    $group    = $this->settings_model->getPriceGroupByID($group_id);
+
+                    // Build dataset: selected products or all products with their price for this group
+                    $rows = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($pgp = $this->settings_model->getProductGroupPriceByPID($id, $group_id)) {
+                                $rows[] = $pgp; // has ->code, ->name, ->price
+                            }
+                        }
+                    } else {
+                        // Fetch all products joined with group price (may be null)
+                        $pg = "(SELECT {$this->db->dbprefix('product_prices')}.price as price, {$this->db->dbprefix('product_prices')}.product_id as product_id FROM {$this->db->dbprefix('product_prices')} WHERE {$this->db->dbprefix('product_prices')}.price_group_id = {$group_id}) GP";
+                        $this->db->select("{$this->db->dbprefix('products')}.id as id, {$this->db->dbprefix('products')}.code as code, {$this->db->dbprefix('products')}.name as name, GP.price", false)
+                                 ->join($pg, 'GP.product_id=products.id', 'left');
+                        $rows = $this->db->get('products')->result();
+                    }
+
+                    // Build HTML
+                    $html  = '<h3 style="text-align:center;">' . lang('group_product_prices') . ' - ' . htmlspecialchars($group ? $group->name : '') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('product_code') . '</th>'
+                        . '<th>' . lang('product_name') . '</th>'
+                        . '<th>' . lang('price') . '</th>'
+                        . '<th>' . lang('group_name') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($rows)) {
+                        foreach ($rows as $r) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($r->code) . '</td>'
+                                . '<td>' . htmlspecialchars($r->name) . '</td>'
+                                . '<td>' . htmlspecialchars((string) ($r->price === null ? '' : $r->price)) . '</td>'
+                                . '<td>' . htmlspecialchars($group ? $group->name : '') . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'group_product_prices_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
                 $this->session->set_flashdata('error', lang('no_price_group_selected'));
@@ -2619,6 +3112,45 @@ class system_settings extends MY_Controller
                     $filename = 'tax_rates_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    // Build set: selected or all
+                    $taxes = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($t = $this->settings_model->getTaxRateByID($id)) {
+                                $taxes[] = $t;
+                            }
+                        }
+                    } else {
+                        $taxes = $this->settings_model->getAllTaxRates();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('tax_rates') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('tax_rate') . '</th>'
+                        . '<th>' . lang('type') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($taxes)) {
+                        foreach ($taxes as $tax) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($tax->name) . '</td>'
+                                . '<td>' . htmlspecialchars($tax->code) . '</td>'
+                                . '<td>' . htmlspecialchars($tax->rate) . '</td>'
+                                . '<td>' . (($tax->type == 1) ? lang('percentage') : lang('fixed')) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'tax_rates_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
                 $this->session->set_flashdata('error', lang('no_record_selected'));
@@ -2679,6 +3211,47 @@ class system_settings extends MY_Controller
                     $filename = 'units_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    // Build set of units: selected or all
+                    $units = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($u = $this->site->getUnitByID($id)) {
+                                $units[] = $u;
+                            }
+                        }
+                    } else {
+                        $units = $this->db->get('units')->result();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('units') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('base_unit') . '</th>'
+                        . '<th>' . lang('operator') . '</th>'
+                        . '<th>' . lang('operation_value') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($units)) {
+                        foreach ($units as $unit) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($unit->code) . '</td>'
+                                . '<td>' . htmlspecialchars($unit->name) . '</td>'
+                                . '<td>' . htmlspecialchars((string) $unit->base_unit) . '</td>'
+                                . '<td>' . htmlspecialchars((string) $unit->operator) . '</td>'
+                                . '<td>' . htmlspecialchars((string) $unit->operation_value) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'units_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
                 $this->session->set_flashdata('error', lang('no_record_selected'));
@@ -2890,6 +3463,44 @@ class system_settings extends MY_Controller
                     $filename = 'warehouses_' . date('Y_m_d_H_i_s');
                     $this->load->helper('excel');
                     create_excel($this->excel, $filename);
+                } elseif ($this->input->post('form_action') == 'export_pdf') {
+                    $selected = $this->input->post('val');
+                    $warehouses = [];
+                    if (!empty($selected)) {
+                        foreach ($selected as $id) {
+                            if ($w = $this->settings_model->getWarehouseByID($id)) {
+                                $warehouses[] = $w;
+                            }
+                        }
+                    } else {
+                        $warehouses = $this->settings_model->getAllWarehouses();
+                    }
+
+                    $html  = '<h3 style="text-align:center;">' . lang('warehouses') . '</h3>';
+                    $html .= '<table width="100%" border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;font-size:12px;">';
+                    $html .= '<thead><tr>'
+                        . '<th>' . lang('code') . '</th>'
+                        . '<th>' . lang('name') . '</th>'
+                        . '<th>' . lang('address') . '</th>'
+                        . '<th>' . lang('city') . '</th>'
+                        . '</tr></thead><tbody>';
+
+                    if (!empty($warehouses)) {
+                        foreach ($warehouses as $wh) {
+                            $html .= '<tr>'
+                                . '<td>' . htmlspecialchars($wh->code) . '</td>'
+                                . '<td>' . htmlspecialchars($wh->name) . '</td>'
+                                . '<td>' . htmlspecialchars($wh->address) . '</td>'
+                                . '<td>' . htmlspecialchars($wh->city) . '</td>'
+                                . '</tr>';
+                        }
+                    }
+
+                    $html .= '</tbody></table>';
+
+                    $this->load->library('tec_mpdf');
+                    $filename = 'warehouses_' . date('Y_m_d_H_i_s') . '.pdf';
+                    $this->tec_mpdf->generate($html, $filename, 'D');
                 }
             } else {
                 $this->session->set_flashdata('error', lang('no_warehouse_selected'));

@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
  *  ==============================================================================
- *  Author    : Mian Saleem
- *  Email     : saleem@tecdiary.com
- *  For       : Stock Manager Advance
- *  Web       : http://tecdiary.com
+ *  Product   : Cajam-mult-store
+ *  Developer : Wolinet Technology
+ *  Author    : Renatus Bernardo
+ *  Notes     : Core utility library (forked and customized)
  *  ==============================================================================
  */
 
@@ -392,8 +392,11 @@ class Sma
         die();
     }
 
-    public function qrcode($type = 'text', $text = 'http://tecdiary.com', $size = 2, $level = 'H', $sq = null, $svg = false)
+    public function qrcode($type = 'text', $text = null, $size = 2, $level = 'H', $sq = null, $svg = false)
     {
+        if ($text === null) {
+            $text = base_url();
+        }
         if ($type == 'link') {
             $text = urldecode($text);
         }

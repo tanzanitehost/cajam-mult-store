@@ -71,6 +71,9 @@
             <div class="copyright line-height-lg">
                 &copy; <?= date('Y'); ?> <?= $shop_settings->shop_name; ?>. <?= lang('all_rights_reserved'); ?>
             </div>
+            <div class="line-height-md" style="opacity:0.9; font-size: 12px;">
+                Powered by <strong>Cajam-mult-store</strong> — Wolinet Technology (Author: Renatus Bernardo)
+            </div>
             <ul class="list-inline pull-right line-height-md">
                 <li class="padding-x-no text-size-lg">
                     <a href="#" class="theme-color text-blue" data-color="blue"><i class="fa fa-square"></i></a>

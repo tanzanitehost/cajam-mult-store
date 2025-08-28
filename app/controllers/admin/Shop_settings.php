@@ -12,21 +12,31 @@ class Shop_settings extends MY_Controller
             $this->session->set_userdata('requested_page', $this->uri->uri_string());
             $this->sma->md('login');
         }
-
-        if (!$this->Owner) {
-            $this->session->set_flashdata('warning', lang('access_denied'));
-            redirect('admin');
-        }
+        // Enforce permissions: Owners/Admins allowed generally; non-owners checked per action
+        // Keep some actions Owner-only for safety.
         $this->lang->admin_load('front_end', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->admin_model('shop_admin_model');
         $this->upload_path       = 'assets/uploads/';
         $this->image_types       = 'gif|jpg|jpeg|png';
         $this->allowed_file_size = '1024';
+
+        if (!$this->Owner) {
+            $owner_only_methods = ['index', 'install_update', 'slugify', 'sitemap', 'sms_settings', 'send_sms', 'sms_log'];
+            $current_method     = $this->router->method ?? null;
+            if (in_array($current_method, $owner_only_methods, true)) {
+                $this->session->set_flashdata('warning', lang('access_denied'));
+                redirect('admin');
+            }
+        }
     }
 
     public function add_page()
     {
+        if (!$this->sma->actionPermissions('add', 'pages')) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect('admin');
+        }
         $this->form_validation->set_rules('name', lang('name'), 'required|max_length[15]');
         $this->form_validation->set_rules('title', lang('title'), 'required|max_length[60]');
         $this->form_validation->set_rules('description', lang('description'), 'required');
@@ -59,6 +69,9 @@ class Shop_settings extends MY_Controller
 
     public function delete_page($id = null)
     {
+        if (!$this->sma->actionPermissions('delete', 'pages')) {
+            $this->sma->send_json(['error' => 1, 'msg' => lang('access_denied')]);
+        }
         if (!$id) {
             $this->sma->send_json(['error' => 1, 'msg' => lang('id_not_found')]);
         }
@@ -69,6 +82,10 @@ class Shop_settings extends MY_Controller
 
     public function edit_page($id = null)
     {
+        if (!$this->sma->actionPermissions('edit', 'pages')) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect('admin');
+        }
         $page = $this->shop_admin_model->getPageByID($id);
         $this->form_validation->set_rules('name', lang('name'), 'required|max_length[15]');
         $this->form_validation->set_rules('title', lang('title'), 'required|max_length[60]');
@@ -106,6 +123,9 @@ class Shop_settings extends MY_Controller
 
     public function getPages()
     {
+        if (!$this->sma->actionPermissions('index', 'pages')) {
+            $this->sma->send_json(['error' => 1, 'msg' => lang('access_denied')]);
+        }
         $this->load->library('datatables');
         $this->datatables
             ->select('id, name, slug, active, order_no, title')
@@ -251,6 +271,10 @@ class Shop_settings extends MY_Controller
 
     public function pages()
     {
+        if (!$this->sma->actionPermissions('index', 'pages')) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect('admin');
+        }
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
 
         $bc   = [['link' => base_url(), 'page' => lang('home')], ['link' => admin_url('shop_settings'), 'page' => lang('shop_settings')], ['link' => '#', 'page' => lang('pages')]];
@@ -352,6 +376,10 @@ class Shop_settings extends MY_Controller
 
     public function slider()
     {
+        if (!$this->sma->actionPermissions('edit', 'slider')) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect('admin');
+        }
         // $this->form_validation->set_rules('image1', lang('image1'), 'trim|required');
         $this->form_validation->set_rules('link1', lang('link') . ' 1', 'trim|max_length[160]');
         $this->form_validation->set_rules('caption1', lang('caption') . ' 1', 'trim|max_length[160]');

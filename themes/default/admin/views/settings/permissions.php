@@ -323,6 +323,230 @@
                                     </td>
                                 </tr>
 
+                                <!-- Settings related modules -->
+                                <tr>
+                                    <td><?= lang('categories'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="categories-index" <?php echo !empty($p->{'categories-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="categories-add" <?php echo !empty($p->{'categories-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="categories-edit" <?php echo !empty($p->{'categories-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="categories-delete" <?php echo !empty($p->{'categories-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('brands'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="brands-index" <?php echo !empty($p->{'brands-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="brands-add" <?php echo !empty($p->{'brands-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="brands-edit" <?php echo !empty($p->{'brands-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="brands-delete" <?php echo !empty($p->{'brands-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('customer_groups'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="customer_groups-index" <?php echo !empty($p->{'customer_groups-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="customer_groups-add" <?php echo !empty($p->{'customer_groups-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="customer_groups-edit" <?php echo !empty($p->{'customer_groups-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="customer_groups-delete" <?php echo !empty($p->{'customer_groups-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('price_groups'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="price_groups-index" <?php echo !empty($p->{'price_groups-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="price_groups-add" <?php echo !empty($p->{'price_groups-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="price_groups-edit" <?php echo !empty($p->{'price_groups-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="price_groups-delete" <?php echo !empty($p->{'price_groups-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('tax_rates'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="tax_rates-index" <?php echo !empty($p->{'tax_rates-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="tax_rates-add" <?php echo !empty($p->{'tax_rates-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="tax_rates-edit" <?php echo !empty($p->{'tax_rates-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="tax_rates-delete" <?php echo !empty($p->{'tax_rates-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('units'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="units-index" <?php echo !empty($p->{'units-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="units-add" <?php echo !empty($p->{'units-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="units-edit" <?php echo !empty($p->{'units-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="units-delete" <?php echo !empty($p->{'units-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('variants'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="variants-index" <?php echo !empty($p->{'variants-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="variants-add" <?php echo !empty($p->{'variants-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="variants-edit" <?php echo !empty($p->{'variants-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="variants-delete" <?php echo !empty($p->{'variants-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('warehouses'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="warehouses-index" <?php echo !empty($p->{'warehouses-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="warehouses-add" <?php echo !empty($p->{'warehouses-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="warehouses-edit" <?php echo !empty($p->{'warehouses-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="warehouses-delete" <?php echo !empty($p->{'warehouses-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('groups'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="groups-index" <?php echo !empty($p->{'groups-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="groups-add" <?php echo !empty($p->{'groups-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="groups-edit" <?php echo !empty($p->{'groups-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="groups-delete" <?php echo !empty($p->{'groups-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                                <!-- Frontend settings modules -->
+                                <tr>
+                                    <td><?= lang('pages'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="pages-index" <?php echo !empty($p->{'pages-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="pages-add" <?php echo !empty($p->{'pages-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="pages-edit" <?php echo !empty($p->{'pages-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="pages-delete" <?php echo !empty($p->{'pages-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('slider'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="slider-index" <?php echo !empty($p->{'slider-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="slider-edit" <?php echo !empty($p->{'slider-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('banners'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="banners-index" <?php echo !empty($p->{'banners-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="banners-add" <?php echo !empty($p->{'banners-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="banners-edit" <?php echo !empty($p->{'banners-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="banners-delete" <?php echo !empty($p->{'banners-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('menus'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="menus-index" <?php echo !empty($p->{'menus-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="menus-add" <?php echo !empty($p->{'menus-add'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="menus-edit" <?php echo !empty($p->{'menus-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="menus-delete" <?php echo !empty($p->{'menus-delete'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><?= lang('themes'); ?></td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="themes-index" <?php echo !empty($p->{'themes-index'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" value="1" class="checkbox" name="themes-edit" <?php echo !empty($p->{'themes-edit'}) ? 'checked' : ''; ?>>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                    <td></td>
+                                </tr>
+
                                 <tr>
                                     <td><?= lang('reports'); ?></td>
                                     <td colspan="5">

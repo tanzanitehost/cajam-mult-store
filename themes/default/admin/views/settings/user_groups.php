@@ -70,7 +70,13 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center"><?php echo lang('no_data_available'); ?></td>
+                                <td class="text-center">
+                                    <input class="checkbox checkth" type="checkbox" disabled="disabled" />
+                                </td>
+                                <td class="text-muted"><?php echo lang('no_data_available'); ?></td>
+                                <td class="text-muted"></td>
+                                <td class="text-muted"></td>
+                                <td class="text-muted"></td>
                             </tr>
                         <?php endif; ?>
                         </tbody>
